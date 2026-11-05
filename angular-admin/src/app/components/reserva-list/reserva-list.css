@@ -1,0 +1,70 @@
+:host {
+  display: block;
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-header {
+  font-weight: 600;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+  padding: 12px;
+}
+
+.table thead th {
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-control,
+.form-select {
+  border-radius: 7px;
+}
+
+.btn {
+  border-radius: 7px;
+}
+
+.motivo-cell {
+  min-width: 150px;
+  max-width: 250px;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 7px 10px;
+}
+
+.student-search-results {
+  max-height: 220px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 10;
+}
+
+.student-search-results button {
+  text-align: left;
+}
+
+.selected-student {
+  min-height: 38px;
+  background-color: #f8f9fa;
+}
