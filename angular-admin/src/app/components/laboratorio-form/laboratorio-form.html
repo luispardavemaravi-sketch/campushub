@@ -1,1 +1,56 @@
-<p>laboratorio-form works!</p>
+<h2>{{ id ? 'Editar laboratorio' : 'Nuevo laboratorio' }}</h2>
+
+@if (error()) {
+  <div class="alert alert-danger">{{ error() }}</div>
+}
+
+<form [formGroup]="form" (ngSubmit)="guardar()" class="col-md-8 col-lg-6" novalidate>
+  <div class="mb-3">
+    <label class="form-label" for="nombre">Nombre</label>
+    <input id="nombre" class="form-control" formControlName="nombre" placeholder="Lab A-301"
+      [class.is-invalid]="invalido('nombre')" />
+    @if (form.controls.nombre.hasError('required')) {
+      <div class="invalid-feedback">El nombre es obligatorio.</div>
+    }
+    @if (form.controls.nombre.hasError('formatoLab')) {
+      <div class="invalid-feedback">Usa el formato "Lab A-301" (letra de pabellón y número de aula).</div>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="sede">Sede</label>
+    <input id="sede" class="form-control" formControlName="sede" placeholder="Lima Centro"
+      [class.is-invalid]="invalido('sede')" />
+    <div class="invalid-feedback">La sede es obligatoria.</div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="capacidad">Capacidad (1 a 60)</label>
+    <input id="capacidad" type="number" class="form-control" formControlName="capacidad"
+      [class.is-invalid]="invalido('capacidad')" />
+    @if (form.controls.capacidad.hasError('required')) {
+      <div class="invalid-feedback">La capacidad es obligatoria.</div>
+    }
+    @if (form.controls.capacidad.hasError('min') || form.controls.capacidad.hasError('max')) {
+      <div class="invalid-feedback">La capacidad debe estar entre 1 y 60.</div>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="equipos">Equipos (separados por comas)</label>
+    <input id="equipos" class="form-control" formControlName="equipos" placeholder="PC i7, Proyector" />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="estado">Estado</label>
+    <select id="estado" class="form-select" formControlName="estado">
+      <option value="disponible">Disponible</option>
+      <option value="mantenimiento">Mantenimiento</option>
+    </select>
+  </div>
+
+  <button class="btn btn-primary me-2" type="submit" [disabled]="guardando()">
+    {{ id ? 'Guardar cambios' : 'Crear laboratorio' }}
+  </button>
+  <a class="btn btn-outline-secondary" routerLink="/laboratorios">Cancelar</a>
+</form>
