@@ -5,11 +5,12 @@ import { RouterLink } from '@angular/router';
 import { LaboratorioService } from '../../services/laboratorio';
 import { Laboratorio } from '../../models/laboratorio.model';
 import { firstValueFrom } from 'rxjs';
+import { ResaltarMantenimientoDirective } from '../../directives/resaltar-mantenimiento';
 
 @Component({
   selector: 'app-laboratorio-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ResaltarMantenimientoDirective],
   templateUrl: './laboratorio-list.html',
   styleUrls: ['./laboratorio-list.css']
 })
@@ -31,7 +32,7 @@ export class LaboratorioListComponent implements OnInit {
 
   async cargarLaboratorios(): Promise<void> {
     try {
-      this.laboratorios = await firstValueFrom(this.labService.obtenerTodos());
+      this.laboratorios = await firstValueFrom(this.labService.listar());
       this.laboratoriosFiltrados = [...this.laboratorios];
     } catch (err) {
       console.error('Error al cargar laboratorios:', err);

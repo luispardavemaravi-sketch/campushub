@@ -44,7 +44,8 @@
       </thead>
       <tbody>
         @for (lab of laboratoriosFiltrados; track lab.id) {
-          <tr>
+          <!-- 1. Aplicamos la directiva de Mariana en la fila -->
+          <tr [resaltarMantenimiento]="lab.estado">
             <td>{{ lab.nombre }}</td>
             <td>{{ lab.sede }}</td>
             <td>{{ lab.capacidad }}</td>
@@ -57,10 +58,13 @@
               </span>
             </td>
             <td>
+              <!-- 2. Usamos [ngClass] como pidió el líder para los estados -->
               <span 
                 class="badge" 
-                [class.bg-success]="lab.estado === 'disponible'" 
-                [class.bg-warning]="lab.estado === 'mantenimiento'"
+                [ngClass]="{
+                  'bg-success': lab.estado === 'disponible', 
+                  'bg-warning': lab.estado === 'mantenimiento'
+                }"
               >
                 {{ lab.estado }}
               </span>
