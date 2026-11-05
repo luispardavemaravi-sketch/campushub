@@ -1,53 +1,23 @@
-<div class="container mt-4">
-  @if (cargando) {
-    <div class="text-center my-5">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Cargando...</span>
-      </div>
-      <p class="text-muted mt-2">Cargando detalle del laboratorio...</p>
-    </div>
-  } @else if (laboratorio) {
-    <div class="card shadow-sm">
-      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-        <h3 class="mb-0">{{ laboratorio.nombre }}</h3>
-        <span [ngClass]="{
-          'badge bg-success': laboratorio.estado === 'disponible',
-          'badge bg-warning text-dark': laboratorio.estado === 'mantenimiento'
-        }">
-          {{ laboratorio.estado }}
-        </span>
-      </div>
-      
-      <div class="card-body">
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <p><strong>Sede:</strong> {{ laboratorio.sede }}</p>
-            <p><strong>Capacidad:</strong> {{ laboratorio.capacidad }} personas</p>
-          </div>
-          <div class="col-md-6">
-            <p><strong>Equipos disponibles:</strong></p>
-            <div>
-              @for (eq of laboratorio.equipos; track eq) {
-                <span class="badge bg-secondary me-1 mb-1">{{ eq }}</span>
-              } @empty {
-                <span class="text-muted">Sin equipos registrados</span>
-              }
-            </div>
-          </div>
-        </div>
-      </div>
+<div *ngIf="cargando" class="text-center my-5">
+  <div class="spinner-border text-primary" role="status"></div>
+  <p class="mt-2">Cargando detalle del laboratorio...</p>
+</div>
 
-      <div class="card-footer d-flex justify-content-between">
-        <button (click)="volver()" class="btn btn-outline-secondary">← Volver al catálogo</button>
-        <a [routerLink]="['/laboratorios', laboratorio.id, 'editar']" class="btn btn-primary">Editar Laboratorio</a>
-      </div>
-    </div>
-  } @else {
-    <div class="alert alert-warning text-center" role="alert">
-      No se encontró información para este laboratorio.
-    </div>
-    <div class="text-center">
-      <button (click)="volver()" class="btn btn-secondary">Volver al catálogo</button>
-    </div>
-  }
+<!-- Si ya cargó y SÍ existe el laboratorio -->
+<div *ngIf="!cargando && laboratorio" class="container mt-4">
+  <h2>{{ laboratorio.nombre }}</h2>
+  <p>Capacidad: {{ laboratorio.capacidad }}</p>
+  <span class="badge" [class.bg-success]="laboratorio.estado === 'disponible'" [class.bg-warning]="laboratorio.estado === 'mantenimiento'">
+    {{ laboratorio.estado }}
+  </span>
+  <br><br>
+  <a [routerLink]="['/laboratorios', laboratorio.id, 'editar']" class="btn btn-warning">Editar</a>
+  <a routerLink="/laboratorios" class="btn btn-secondary ms-2">Volver</a>
+</div>
+
+<!-- Si terminó de cargar pero el ID NO EXISTE en laboratorios -->
+<div *ngIf="!cargando && !laboratorio" class="container alert alert-danger my-5 text-center">
+  <h4>¡Laboratorio no encontrado!</h4>
+  <p>El ID consultado no corresponde a ningún laboratorio registrado en la base de datos.</p>
+  <a routerLink="/laboratorios" class="btn btn-primary">Volver a la lista de laboratorios</a>
 </div>
