@@ -1,37 +1,121 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+
+import {
+  HttpClient,
+  HttpParams
+} from '@angular/common/http';
+
+import {
+  Injectable,
+  inject
+} from '@angular/core';
+
 import { Observable } from 'rxjs';
 
+import { API_BASE_URL } from '../config/api.config';
+
+import {
+  Laboratorio,
+  LaboratorioPayload,
+  FiltroLaboratorios
+} from '../models/laboratorio.model';
+
+/**
+ * CampusHub - Servicio de laboratorios.
+ *
+ * Centraliza las operaciones CRUD del avance 1.
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class Laboratorio {
-  private http = inject(HttpClient);
-  // URL de tu json-server
-  private apiUrl = 'http://localhost:3000/laboratorios';
+export class LaboratorioService {
 
-  // Obtener todos
-  getLaboratorios(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  private readonly http = inject(HttpClient);
+
+  private readonly url = `${API_BASE_URL}/laboratorios`;
+
+  /**
+   * GET /laboratorios
+   * Obtiene los laboratorios registrados.
+   * Admite filtros por sede y búsqueda.
+   */
+  listar(
+    filtros: FiltroLaboratorios = {}
+  ): Observable<Laboratorio[]> {
+
+    let params = new HttpParams();
+
+    if (filtros.sede?.trim()) {
+      params = params.set(
+        'sede',
+        filtros.sede.trim()
+      );
+    }
+
+    if (filtros.q?.trim()) {
+      params = params.set(
+        'q',
+        filtros.q.trim()
+      );
+    }
+
+    return this.http.get<Laboratorio[]>(
+      this.url,
+      { params }
+    );
   }
 
-  // Obtener uno solo por ID (¡Este es el clave para el detalle!)
-  getLaboratorioById(id: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  /**
+   * GET /laboratorios/:id
+   * Obtiene un laboratorio por su ID.
+   */
+  obtenerPorId(
+    id: number
+  ): Observable<Laboratorio> {
+
+    return this.http.get<Laboratorio>(
+      `${this.url}/${id}`
+    );
   }
 
-  // Eliminar
-  deleteLaboratorio(id: string | number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  /**
+   * POST /laboratorios
+   * Registra un nuevo laboratorio.
+   */
+  crear(
+    datos: LaboratorioPayload
+  ): Observable<Laboratorio> {
+
+    return this.http.post<Laboratorio>(
+      this.url,
+      datos
+    );
   }
 
-  // Crear (para el formulario de nuevo laboratorio)
-  createLaboratorio(laboratorio: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, laboratorio);
+  /**
+   * PUT /laboratorios/:id
+   * Actualiza un laboratorio existente.
+   */
+  actualizar(
+    id: number,
+    datos: LaboratorioPayload
+  ): Observable<Laboratorio> {
+
+    return this.http.put<Laboratorio>(
+      `${this.url}/${id}`,
+      datos
+    );
   }
 
-  // Actualizar (para el formulario de edición)
-  updateLaboratorio(id: string | number, laboratorio: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, laboratorio);
+  /**
+   * DELETE /laboratorios/:id
+   * Elimina un laboratorio.
+   */
+  eliminar(
+    id: number
+  ): Observable<void> {
+
+    return this.http.delete<void>(
+      `${this.url}/${id}`
+    );
   }
 }
