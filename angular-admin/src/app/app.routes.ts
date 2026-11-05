@@ -1,4 +1,3 @@
-
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -11,7 +10,7 @@ export const routes: Routes = [
     path: 'laboratorios',
     loadComponent: () =>
       import('./components/laboratorio-list/laboratorio-list')
-        .then(m => m.LaboratorioList)
+        .then(m => m.LaboratorioListComponent)
   },
   {
     path: 'laboratorios/nuevo',
@@ -29,7 +28,7 @@ export const routes: Routes = [
     path: 'laboratorios/:id',
     loadComponent: () =>
       import('./components/laboratorio-detail/laboratorio-detail')
-        .then(m => m.LaboratorioDetail)
+        .then(m => m.LaboratorioDetailComponent)
   },
   {
     path: 'reservas',
