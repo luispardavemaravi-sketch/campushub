@@ -1,12 +1,22 @@
+import { NgClass } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { LaboratorioInput } from '../../models/interfaces';
 import { LaboratorioService } from '../../services/laboratorio';
-import { nombreLaboratorioValidator } from '../../validators/regex.validator';
+import { validarLaboratorio } from '../../../core/validadores';
+import { equiposValidator, nombreLaboratorioValidator } from './laboratorio.validators';
+
+// Forma de los datos que se envian al API (el id lo asigna json-server)
+interface DatosLaboratorio {
+  nombre: string;
+  sede: string;
+  capacidad: number;
+  equipos: string[];
+  estado: 'disponible' | 'mantenimiento';
+}
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, NgClass],
   selector: 'app-laboratorio-form',
   styleUrl: './laboratorio-form.css',
   templateUrl: './laboratorio-form.html',
@@ -17,31 +27,49 @@ export class LaboratorioForm implements OnInit {
   private ruta = inject(ActivatedRoute);
   private router = inject(Router);
 
-  id: number | null = null; // null = modo "nuevo"
-  error = signal('');
+  id: number | null = null; // null = modo "nuevo"; con numero = modo "editar"
   guardando = signal(false);
+  errorApi = signal('');
+  erroresCore = signal<string[]>([]);
 
+  // Formulario reactivo: FormBuilder arma el FormGroup con sus FormControl
   form = this.fb.nonNullable.group({
     nombre: ['', [Validators.required, nombreLaboratorioValidator()]],
-    sede: ['', Validators.required],
+    sede: ['', [Validators.required]],
     capacidad: [20, [Validators.required, Validators.min(1), Validators.max(60)]],
-    equipos: [''], // texto separado por comas
-    estado: ['disponible', Validators.required],
+    equipos: ['', [equiposValidator()]],
+    estado: ['disponible', [Validators.required]],
   });
 
   ngOnInit() {
-    const idRuta = this.ruta.snapshot.paramMap.get('id');
-    if (idRuta) {
+    // paramMap se vuelve a emitir si cambia el :id sin recrear el componente
+    this.ruta.paramMap.subscribe((params) => {
+      const idRuta = params.get('id');
+      this.errorApi.set('');
+      this.erroresCore.set([]);
+      if (!idRuta) {
+        this.id = null;
+        this.form.reset({ nombre: '', sede: '', capacidad: 20, equipos: '', estado: 'disponible' });
+        return;
+      }
       this.id = Number(idRuta);
       this.servicio.obtener(this.id).subscribe({
+        // patchValue llena el formulario con los datos que ya existen
         next: (lab) =>
-          this.form.patchValue({ ...lab, equipos: lab.equipos.join(', ') }),
-        error: () => this.error.set('No se encontró el laboratorio.'),
+          this.form.patchValue({
+            nombre: lab.nombre,
+            sede: lab.sede,
+            capacidad: lab.capacidad,
+            equipos: lab.equipos.join(', '),
+            estado: lab.estado,
+          }),
+        error: () => this.errorApi.set('No se encontró el laboratorio solicitado.'),
       });
-    }
+    });
   }
 
-  invalido(campo: 'nombre' | 'sede' | 'capacidad') {
+  // true si el campo es invalido Y el usuario ya lo toco (para no mostrar errores de entrada)
+  invalido(campo: 'nombre' | 'sede' | 'capacidad' | 'equipos') {
     const c = this.form.controls[campo];
     return c.invalid && (c.touched || c.dirty);
   }
@@ -52,19 +80,27 @@ export class LaboratorioForm implements OnInit {
       return;
     }
     const v = this.form.getRawValue();
-    const lab: LaboratorioInput = {
+    const datos: DatosLaboratorio = {
       nombre: v.nombre.trim(),
       sede: v.sede.trim(),
       capacidad: Number(v.capacidad),
       equipos: v.equipos.split(',').map((e) => e.trim()).filter(Boolean),
       estado: v.estado === 'mantenimiento' ? 'mantenimiento' : 'disponible',
     };
+
+    // Segunda validacion con core-js (la misma que usara Express en el avance 5)
+    const errores: string[] = validarLaboratorio(datos);
+    this.erroresCore.set(errores);
+    if (errores.length > 0) return;
+
     this.guardando.set(true);
-    const peticion = this.id ? this.servicio.actualizar(this.id, lab) : this.servicio.crear(lab);
+    this.errorApi.set('');
+    // POST si es nuevo, PUT si estamos editando
+    const peticion = this.id ? this.servicio.actualizar(this.id, datos) : this.servicio.crear(datos);
     peticion.subscribe({
       next: () => this.router.navigate(['/laboratorios']),
       error: () => {
-        this.error.set('No se pudo guardar. Revisa que el API esté encendido.');
+        this.errorApi.set('No se pudo guardar. Verifica que el API esté encendido (npm run api).');
         this.guardando.set(false);
       },
     });
