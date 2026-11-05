@@ -4,9 +4,6 @@ export type EstadoReserva =
   | 'aprobada'
   | 'rechazada';
 
-/**
- * Representación de una reserva del API.
- */
 export interface Reserva {
   id: number;
   codigo: string;
@@ -20,8 +17,4 @@ export interface Reserva {
   creadoEn: string;
 }
 
-/**
- * Datos de una nueva reserva.
- */
-export type ReservaPayload =
-  Omit<Reserva, 'id'>;
+export type ReservaPayload = Omit<Reserva, 'id'>;

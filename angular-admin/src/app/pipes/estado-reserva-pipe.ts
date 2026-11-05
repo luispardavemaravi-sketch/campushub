@@ -5,16 +5,23 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true
 })
 export class EstadoReservaPipe implements PipeTransform {
-  transform(value: string): string {
-    switch (value?.toLowerCase()) {
-      case 'aprobada':
-        return '<span class="badge bg-success">🟢 Aprobada</span>';
+
+  transform(estado: string | null | undefined): string {
+
+    switch (estado?.toLowerCase()) {
+
       case 'pendiente':
-        return '<span class="badge bg-warning text-dark">🟡 Pendiente</span>';
+        return '🟡 Pendiente';
+
+      case 'aprobada':
+        return '🟢 Aprobada';
+
       case 'rechazada':
-        return '<span class="badge bg-danger">🔴 Rechazada</span>';
+        return '🔴 Rechazada';
+
       default:
-        return `<span class="badge bg-secondary">${value || 'Desconocido'}</span>`;
+        return '⚪ Desconocido';
+
     }
   }
 }
