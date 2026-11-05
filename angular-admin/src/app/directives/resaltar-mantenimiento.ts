@@ -1,19 +1,58 @@
-import { Directive, ElementRef, Input, OnInit, inject } from '@angular/core';
+
+import {
+  Directive,
+  ElementRef,
+  Input,
+  OnChanges,
+  Renderer2,
+  SimpleChanges,
+  inject
+} from '@angular/core';
 
 @Directive({
-  selector: '[resaltarMantenimiento]',
+  selector: '[appResaltarMantenimiento]',
   standalone: true
 })
-export class ResaltarMantenimientoDirective implements OnInit {
-  private el = inject(ElementRef);
-  
-  @Input() resaltarMantenimiento: string = '';
+export class ResaltarMantenimientoDirective implements OnChanges {
 
-  ngOnInit(): void {
-    if (this.resaltarMantenimiento?.toLowerCase() === 'mantenimiento') {
-      this.el.nativeElement.style.backgroundColor = '#fff3cd'; // Amarillo suave de alerta
-      this.el.nativeElement.style.color = '#856404';
-      this.el.nativeElement.style.fontWeight = 'bold';
+  private readonly elemento =
+    inject(ElementRef<HTMLElement>);
+
+  private readonly renderer = inject(Renderer2);
+
+  @Input() appResaltarMantenimiento: string | null = null;
+
+  ngOnChanges(_changes: SimpleChanges): void {
+
+    const fila = this.elemento.nativeElement;
+
+    if (
+      this.appResaltarMantenimiento?.toLowerCase() ===
+      'mantenimiento'
+    ) {
+
+      this.renderer.addClass(
+        fila,
+        'table-warning'
+      );
+
+      this.renderer.setAttribute(
+        fila,
+        'title',
+        'El laboratorio asociado está en mantenimiento'
+      );
+
+    } else {
+
+      this.renderer.removeClass(
+        fila,
+        'table-warning'
+      );
+
+      this.renderer.removeAttribute(
+        fila,
+        'title'
+      );
     }
   }
 }
