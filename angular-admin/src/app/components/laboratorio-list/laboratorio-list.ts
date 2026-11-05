@@ -1,9 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Laboratorio } from '../../models/laboratorio.model';
 import { LaboratorioService } from '../../services/laboratorio';
+import { Laboratorio } from '../../models/laboratorio.model';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-laboratorio-list',
@@ -14,42 +15,54 @@ import { LaboratorioService } from '../../services/laboratorio';
 })
 export class LaboratorioListComponent implements OnInit {
   private labService = inject(LaboratorioService);
+  private cdr = inject(ChangeDetectorRef);
 
   laboratorios: Laboratorio[] = [];
   laboratoriosFiltrados: Laboratorio[] = [];
-  cargando: boolean = true;
+
   filtroNombre: string = '';
   filtroSede: string = '';
 
-  ngOnInit(): void {
-    this.cargarLaboratorios();
+  cargando: boolean = true;
+
+  async ngOnInit(): Promise<void> {
+    await this.cargarLaboratorios();
   }
 
-  cargarLaboratorios(): void {
-    this.cargando = true;
-    this.labService.listar().subscribe({
-      next: (data: Laboratorio[]) => {
-        this.laboratorios = data;
-        this.laboratoriosFiltrados = data;
-        this.cargando = false;
-      },
-      error: (err: any) => {
-        console.error('Error al cargar laboratorios:', err);
-        this.cargando = false;
-      }
+  async cargarLaboratorios(): Promise<void> {
+    try {
+      this.laboratorios = await firstValueFrom(this.labService.obtenerTodos());
+      this.laboratoriosFiltrados = [...this.laboratorios];
+    } catch (err) {
+      console.error('Error al cargar laboratorios:', err);
+    } finally {
+      this.cargando = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  filtrar(): void {
+    this.laboratoriosFiltrados = this.laboratorios.filter(lab => {
+      const coincideNombre = lab.nombre ? lab.nombre.toLowerCase().includes(this.filtroNombre.toLowerCase()) : true;
+      const coincideSede = lab.sede ? lab.sede.toLowerCase().includes(this.filtroSede.toLowerCase()) : true;
+      return coincideNombre && coincideSede;
     });
   }
 
-  eliminarLaboratorio(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este laboratorio?')) {
-      this.labService.eliminar(id).subscribe({
-        next: () => {
-          this.cargarLaboratorios();
-        },
-        error: (err: any) => {
-          console.error('Error al eliminar:', err);
-        }
-      });
+  async eliminarLaboratorio(id: number): Promise<void> {
+    const seguro = confirm('¿Estás seguro de que deseas eliminar este laboratorio?');
+    
+    if (seguro) {
+      try {
+        await firstValueFrom(this.labService.eliminar(id));
+        // Actualizamos la lista local en vivo sin recargar la página
+        this.laboratorios = this.laboratorios.filter(lab => lab.id !== id);
+        this.laboratoriosFiltrados = this.laboratoriosFiltrados.filter(lab => lab.id !== id);
+        this.cdr.detectChanges();
+      } catch (err) {
+        console.error('Error al eliminar laboratorio:', err);
+        alert('Ocurrió un error al intentar eliminar el laboratorio.');
+      }
     }
   }
 }

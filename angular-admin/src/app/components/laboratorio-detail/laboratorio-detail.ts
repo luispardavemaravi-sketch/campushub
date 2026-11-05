@@ -15,7 +15,7 @@ import { firstValueFrom } from 'rxjs';
 export class LaboratorioDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private labService = inject(LaboratorioService);
-  private cdr = inject(ChangeDetectorRef); // 👈 Inyectamos el detector de cambios
+  private cdr = inject(ChangeDetectorRef);
 
   laboratorio: Laboratorio | null = null;
   cargando: boolean = true;
@@ -41,7 +41,7 @@ export class LaboratorioDetailComponent implements OnInit {
       this.laboratorio = null;
     } finally {
       this.cargando = false;
-      this.cdr.detectChanges(); // 👈 Forzamos a Angular a repintar la pantalla al terminar
+      this.cdr.detectChanges();
     }
   }
 }

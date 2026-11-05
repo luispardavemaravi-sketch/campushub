@@ -67,61 +67,6 @@
   ],
   "laboratorios": [
     {
-      "nombre": "Lab A-301",
-      "sede": "Lima Centro",
-      "capacidad": 30,
-      "equipos": [
-        "PC i7",
-        "Proyector"
-      ],
-      "estado": "disponible",
-      "id": 1
-    },
-    {
-      "id": 2,
-      "nombre": "Lab B-205",
-      "sede": "Lima Sur",
-      "capacidad": 24,
-      "equipos": [
-        "PC i5",
-        "Arduino"
-      ],
-      "estado": "mantenimiento"
-    },
-    {
-      "id": 3,
-      "nombre": "Lab C-103",
-      "sede": "Lima Este",
-      "capacidad": 40,
-      "equipos": [
-        "PC i5",
-        "Proyector"
-      ],
-      "estado": "disponible"
-    },
-    {
-      "id": 4,
-      "nombre": "Lab D-404",
-      "sede": "Lima Centro",
-      "capacidad": 28,
-      "equipos": [
-        "PC Ryzen 5",
-        "Pizarra digital"
-      ],
-      "estado": "disponible"
-    },
-    {
-      "id": 5,
-      "nombre": "Lab E-210",
-      "sede": "Lima Norte",
-      "capacidad": 32,
-      "equipos": [
-        "PC i7",
-        "Impresora 3D"
-      ],
-      "estado": "disponible"
-    },
-    {
       "id": 6,
       "nombre": "Lab F-305",
       "sede": "Lima Sur",
@@ -142,68 +87,9 @@
         "Proyector"
       ],
       "estado": "mantenimiento"
-    },
-    {
-      "id": 8,
-      "nombre": "Lab H-401",
-      "sede": "Lima Norte",
-      "capacidad": 20,
-      "equipos": [
-        "PC i7",
-        "Router"
-      ],
-      "estado": "disponible"
     }
   ],
   "reservas": [
-    {
-      "id": 1,
-      "codigo": "RES-0001",
-      "laboratorioId": 2,
-      "usuarioId": 3,
-      "fecha": "2026-11-19",
-      "horaInicio": "08:00",
-      "horaFin": "10:00",
-      "motivo": "Proyecto de JavaScript",
-      "estado": "aprobada",
-      "creadoEn": "2026-11-04T08:00:00Z"
-    },
-    {
-      "id": 2,
-      "codigo": "RES-0002",
-      "laboratorioId": 3,
-      "usuarioId": 4,
-      "fecha": "2026-11-19",
-      "horaInicio": "08:00",
-      "horaFin": "10:00",
-      "motivo": "Taller de electrónica",
-      "estado": "pendiente",
-      "creadoEn": "2026-11-04T09:00:00Z"
-    },
-    {
-      "id": 3,
-      "codigo": "RES-0003",
-      "laboratorioId": 4,
-      "usuarioId": 5,
-      "fecha": "2026-11-19",
-      "horaInicio": "08:00",
-      "horaFin": "10:00",
-      "motivo": "Trabajo en equipo",
-      "estado": "rechazada",
-      "creadoEn": "2026-11-04T10:00:00Z"
-    },
-    {
-      "id": 4,
-      "codigo": "RES-0004",
-      "laboratorioId": 5,
-      "usuarioId": 6,
-      "fecha": "2026-11-19",
-      "horaInicio": "08:00",
-      "horaFin": "10:00",
-      "motivo": "Práctica de React",
-      "estado": "aprobada",
-      "creadoEn": "2026-11-04T11:00:00Z"
-    },
     {
       "id": 5,
       "codigo": "RES-0005",
@@ -229,78 +115,6 @@
       "creadoEn": "2026-11-04T13:00:00Z"
     },
     {
-      "id": 7,
-      "codigo": "RES-0007",
-      "laboratorioId": 8,
-      "usuarioId": 3,
-      "fecha": "2026-11-20",
-      "horaInicio": "10:00",
-      "horaFin": "12:00",
-      "motivo": "Trabajo en equipo",
-      "estado": "rechazada",
-      "creadoEn": "2026-11-04T14:00:00Z"
-    },
-    {
-      "id": 8,
-      "codigo": "RES-0008",
-      "laboratorioId": 1,
-      "usuarioId": 4,
-      "fecha": "2026-11-20",
-      "horaInicio": "10:00",
-      "horaFin": "12:00",
-      "motivo": "Práctica de React",
-      "estado": "pendiente",
-      "creadoEn": "2026-11-04T15:00:00Z"
-    },
-    {
-      "id": 9,
-      "codigo": "RES-0009",
-      "laboratorioId": 2,
-      "usuarioId": 5,
-      "fecha": "2026-11-21",
-      "horaInicio": "10:00",
-      "horaFin": "12:00",
-      "motivo": "Proyecto de JavaScript",
-      "estado": "aprobada",
-      "creadoEn": "2026-11-04T16:00:00Z"
-    },
-    {
-      "id": 10,
-      "codigo": "RES-0010",
-      "laboratorioId": 3,
-      "usuarioId": 6,
-      "fecha": "2026-11-21",
-      "horaInicio": "10:00",
-      "horaFin": "12:00",
-      "motivo": "Taller de electrónica",
-      "estado": "pendiente",
-      "creadoEn": "2026-11-04T17:00:00Z"
-    },
-    {
-      "id": 11,
-      "codigo": "RES-0011",
-      "laboratorioId": 4,
-      "usuarioId": 7,
-      "fecha": "2026-11-21",
-      "horaInicio": "12:00",
-      "horaFin": "14:00",
-      "motivo": "Trabajo en equipo",
-      "estado": "rechazada",
-      "creadoEn": "2026-11-04T18:00:00Z"
-    },
-    {
-      "id": 12,
-      "codigo": "RES-0012",
-      "laboratorioId": 5,
-      "usuarioId": 8,
-      "fecha": "2026-11-21",
-      "horaInicio": "12:00",
-      "horaFin": "14:00",
-      "motivo": "Práctica de React",
-      "estado": "aprobada",
-      "creadoEn": "2026-11-04T19:00:00Z"
-    },
-    {
       "id": 13,
       "codigo": "RES-0013",
       "laboratorioId": 6,
@@ -323,78 +137,6 @@
       "motivo": "Taller de electrónica",
       "estado": "pendiente",
       "creadoEn": "2026-11-04T09:00:00Z"
-    },
-    {
-      "id": 15,
-      "codigo": "RES-0015",
-      "laboratorioId": 8,
-      "usuarioId": 5,
-      "fecha": "2026-11-22",
-      "horaInicio": "12:00",
-      "horaFin": "14:00",
-      "motivo": "Trabajo en equipo",
-      "estado": "rechazada",
-      "creadoEn": "2026-11-04T10:00:00Z"
-    },
-    {
-      "id": 16,
-      "codigo": "RES-0016",
-      "laboratorioId": 1,
-      "usuarioId": 6,
-      "fecha": "2026-11-22",
-      "horaInicio": "14:00",
-      "horaFin": "16:00",
-      "motivo": "Práctica de React",
-      "estado": "pendiente",
-      "creadoEn": "2026-11-04T11:00:00Z"
-    },
-    {
-      "id": 17,
-      "codigo": "RES-0017",
-      "laboratorioId": 2,
-      "usuarioId": 7,
-      "fecha": "2026-11-23",
-      "horaInicio": "14:00",
-      "horaFin": "16:00",
-      "motivo": "Proyecto de JavaScript",
-      "estado": "aprobada",
-      "creadoEn": "2026-11-04T12:00:00Z"
-    },
-    {
-      "id": 18,
-      "codigo": "RES-0018",
-      "laboratorioId": 3,
-      "usuarioId": 8,
-      "fecha": "2026-11-23",
-      "horaInicio": "14:00",
-      "horaFin": "16:00",
-      "motivo": "Taller de electrónica",
-      "estado": "pendiente",
-      "creadoEn": "2026-11-04T13:00:00Z"
-    },
-    {
-      "id": 19,
-      "codigo": "RES-0019",
-      "laboratorioId": 4,
-      "usuarioId": 3,
-      "fecha": "2026-11-23",
-      "horaInicio": "14:00",
-      "horaFin": "16:00",
-      "motivo": "Trabajo en equipo",
-      "estado": "aprobada",
-      "creadoEn": "2026-11-04T14:00:00Z"
-    },
-    {
-      "id": 20,
-      "codigo": "RES-0020",
-      "laboratorioId": 5,
-      "usuarioId": 4,
-      "fecha": "2026-11-23",
-      "horaInicio": "14:00",
-      "horaFin": "16:00",
-      "motivo": "Práctica de React",
-      "estado": "rechazada",
-      "creadoEn": "2026-11-04T15:00:00Z"
     }
   ]
 }
