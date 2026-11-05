@@ -53,7 +53,7 @@ export class LaboratorioForm implements OnInit {
         return;
       }
       this.id = Number(idRuta);
-      this.servicio.obtener(this.id).subscribe({
+      this.servicio.obtenerPorId(this.id).subscribe({        // patchValue llena el formulario con los datos que ya existen
         // patchValue llena el formulario con los datos que ya existen
         next: (lab) =>
           this.form.patchValue({
