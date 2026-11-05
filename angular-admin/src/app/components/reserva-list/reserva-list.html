@@ -2,36 +2,51 @@
   <h2>Listado de Reservas</h2>
   <hr>
 
-  <div *ngIf="reservas.length === 0" class="alert alert-info">
-    No hay reservas registradas.
-  </div>
+  <!-- Indicador mientras carga -->
+  @if (cargando) {
+    <div class="text-center my-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  } @else {
+    <!-- Mensaje si ya terminó de cargar y no hay datos -->
+    @if (reservas.length === 0) {
+      <div class="alert alert-info">
+        No hay reservas registradas.
+      </div>
+    }
 
-  <table class="table table-striped table-hover" *ngIf="reservas.length > 0">
-    <thead class="table-dark">
-      <tr>
-        <th>Código</th>
-        <th>Laboratorio</th>
-        <th>Usuario</th>
-        <th>Fecha</th>
-        <th>Horario</th>
-        <th>Motivo</th>
-        <th>Estado</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (reserva of reservas; track reserva.id) {
-        <tr>
-          <td>{{ reserva.codigo }}</td>
-          <td>{{ reserva.laboratorio }}</td>
-          <td>{{ reserva.usuario }}</td>
-          <td>{{ reserva.fecha }}</td>
-          <td>{{ reserva.horaInicio }} - {{ reserva.horaFin }}</td>
-          <td>{{ reserva.motivo }}</td>
-          <td>
-            <span [innerHTML]="reserva.estado | estadoReserva"></span>
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
+    <!-- Tabla cuando sí hay reservas -->
+    @if (reservas.length > 0) {
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Código</th>
+            <th>Laboratorio ID</th>
+            <th>Usuario ID</th>
+            <th>Fecha</th>
+            <th>Horario</th>
+            <th>Motivo</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (reserva of reservas; track reserva.id) {
+            <tr>
+              <td>{{ reserva.codigo }}</td>
+              <td>{{ reserva.laboratorioId }}</td>
+              <td>{{ reserva.usuarioId }}</td>
+              <td>{{ reserva.fecha }}</td>
+              <td>{{ reserva.horaInicio }} - {{ reserva.horaFin }}</td>
+              <td>{{ reserva.motivo }}</td>
+              <td>
+                <span [innerHTML]="reserva.estado | estadoReserva"></span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  }
 </div>
