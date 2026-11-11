@@ -1,43 +1,55 @@
 import { Routes } from '@angular/router';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
+    path: 'login',
+    loadComponent: () =>
+      import('./components/login/login')
+        .then(m => m.LoginComponent)
+  },
+  {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'laboratorios'
+    redirectTo: 'canchas'
   },
   {
-    path: 'laboratorios',
+    path: 'canchas',
+    canActivate: [adminGuard],
     loadComponent: () =>
-      import('./components/laboratorio-list/laboratorio-list')
-        .then(m => m.LaboratorioListComponent)
+      import('./components/cancha-list/cancha-list')
+        .then(m => m.CanchaListComponent)
   },
   {
-    path: 'laboratorios/nuevo',
+    path: 'canchas/nuevo',
+    canActivate: [adminGuard],
     loadComponent: () =>
-      import('./components/laboratorio-form/laboratorio-form')
-        .then(m => m.LaboratorioForm)
+      import('./components/cancha-form/cancha-form')
+        .then(m => m.CanchaForm)
   },
   {
-    path: 'laboratorios/:id/editar',
+    path: 'canchas/:id/editar',
+    canActivate: [adminGuard],
     loadComponent: () =>
-      import('./components/laboratorio-form/laboratorio-form')
-        .then(m => m.LaboratorioForm)
+      import('./components/cancha-form/cancha-form')
+        .then(m => m.CanchaForm)
   },
   {
-    path: 'laboratorios/:id',
+    path: 'canchas/:id',
+    canActivate: [adminGuard],
     loadComponent: () =>
-      import('./components/laboratorio-detail/laboratorio-detail')
-        .then(m => m.LaboratorioDetailComponent)
+      import('./components/cancha-detail/cancha-detail')
+        .then(m => m.CanchaDetailComponent)
   },
   {
     path: 'reservas',
+    canActivate: [adminGuard],
     loadComponent: () =>
       import('./components/reserva-list/reserva-list')
         .then(m => m.ReservaList)
   },
   {
     path: '**',
-    redirectTo: 'laboratorios'
+    redirectTo: 'canchas'
   }
 ];

@@ -1,10 +1,10 @@
 
 export type RolUsuario =
   | 'admin'
-  | 'estudiante';
+  | 'cliente';
 
 /**
- * Usuario del sistema CampusHub.
+ * Usuario del sistema SportHub.
  */
 export interface Usuario {
   id: number;
@@ -16,7 +16,7 @@ export interface Usuario {
 }
 
 /**
- * Representación del usuario sin contraseña.
+ * Representación pública sin contraseña.
  */
 export type UsuarioPublico =
   Omit<Usuario, 'password'>;

@@ -1,0 +1,144 @@
+
+:host {
+  display: block;
+}
+
+.sport-navbar {
+  background: #102b27;
+  color: #ffffff;
+  box-shadow: 0 5px 22px rgba(16, 43, 39, 0.12);
+}
+
+.navbar-container {
+  width: min(1440px, calc(100% - 48px));
+  min-height: 78px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: white;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brand-icon {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: #b9f36a;
+  font-size: 22px;
+}
+
+.brand-text {
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+.brand-text span {
+  color: #b9f36a;
+}
+
+.brand-text small {
+  display: block;
+  margin-top: 6px;
+  color: #a8c2b5;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.navbar-links a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 15px;
+  border-radius: 9px;
+  color: #d2e1d9;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.navbar-links a span {
+  font-size: 18px;
+}
+
+.navbar-links a:hover,
+.navbar-links a.active {
+  background: rgba(185, 243, 106, 0.13);
+  color: #b9f36a;
+}
+
+.navbar-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c3d3cb;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.online-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #b9f36a;
+  box-shadow: 0 0 0 4px rgba(185, 243, 106, 0.12);
+}
+
+@media (max-width: 850px) {
+  .navbar-container {
+    padding: 17px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .brand {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .navbar-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-container {
+    width: calc(100% - 24px);
+  }
+
+  .navbar-links {
+    width: 100%;
+    gap: 4px;
+  }
+
+  .navbar-links a {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+
+  .navbar-tag {
+    display: none;
+  }
+}

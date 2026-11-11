@@ -1,0 +1,266 @@
+
+:host {
+  display: block;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  min-height: 105px;
+  padding: 20px;
+  background: white;
+  border: 1px solid #e5ece6;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(23, 54, 38, 0.035);
+}
+
+.stat-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 14px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.stat-icon-dark {
+  background: #e9f0eb;
+  color: #244c39;
+}
+
+.stat-icon-green {
+  background: #e9f7e5;
+  color: #31804b;
+}
+
+.stat-icon-orange {
+  background: #fff3e4;
+  color: #d28a35;
+}
+
+.stat-label {
+  color: #78867d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.stat-number {
+  margin-top: 3px;
+  color: #173c2d;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.list-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 22px;
+  border-bottom: 1px solid #edf1ed;
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.search-field {
+  position: relative;
+  width: 220px;
+}
+
+.search-field > span {
+  position: absolute;
+  z-index: 1;
+  top: 7px;
+  left: 12px;
+  color: #7c8b80;
+  font-size: 22px;
+}
+
+.search-field input {
+  padding-left: 38px;
+}
+
+.complex-filter {
+  width: 190px;
+}
+
+.sport-table {
+  min-width: 850px;
+}
+
+.sport-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.sport-table tbody tr:hover {
+  background: #f8fbf7;
+}
+
+.court-name {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.court-icon {
+  display: grid;
+  width: 39px;
+  height: 39px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 11px;
+  background: #edf5e9;
+  font-size: 19px;
+}
+
+.court-name strong {
+  display: block;
+  color: #243b2e;
+  font-size: 13px;
+}
+
+.court-name small {
+  display: block;
+  margin-top: 3px;
+  color: #89958d;
+  font-size: 11px;
+}
+
+.complex-name {
+  color: #586b5e;
+  font-size: 13px;
+}
+
+.equipment-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.equipment-tag,
+.equipment-more {
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: #f0f4f0;
+  color: #56675b;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.equipment-more {
+  background: #e6f1df;
+  color: #3d7448;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status-available {
+  background: #e9f7eb;
+  color: #277a42;
+}
+
+.status-maintenance {
+  background: #fff3df;
+  color: #ad6d17;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.action-btn {
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.action-view {
+  background: #eaf2ee;
+  color: #245a40;
+}
+
+.action-edit {
+  background: #fff4df;
+  color: #9b681d;
+}
+
+.action-delete {
+  background: #fff0ee;
+  color: #b64c45;
+}
+
+.action-btn:hover {
+  filter: brightness(0.95);
+  transform: translateY(-1px);
+}
+
+.loading-state {
+  padding: 65px 20px;
+  color: #75847a;
+  text-align: center;
+  font-size: 13px;
+}
+
+@media (max-width: 767px) {
+  .list-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .filter-container {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .search-field,
+  .complex-filter {
+    width: 100%;
+  }
+
+  .filter-container .btn {
+    width: 100%;
+  }
+
+  .stat-card {
+    min-height: 88px;
+    padding: 15px;
+  }
+
+  .stat-number {
+    font-size: 23px;
+  }
+}

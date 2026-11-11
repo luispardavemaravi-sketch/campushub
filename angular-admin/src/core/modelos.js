@@ -1,5 +1,7 @@
+
 /**
- * CampusHub - Modelos orientados a objetos.
+ * SportHub - Modelos orientados a objetos.
+ * Clases principales: Usuario, Cancha y Reserva.
  */
 
 export const aMinutos = (hhmm) => {
@@ -7,13 +9,17 @@ export const aMinutos = (hhmm) => {
     return horas * 60 + minutos;
 };
 
+// =====================================================
+// MODELO USUARIO
+// =====================================================
+
 export class Usuario {
     constructor({
         id,
         nombre,
         correo,
         codigo,
-        rol = 'estudiante',
+        rol = 'cliente',
         password
     } = {}) {
         Object.assign(this, {
@@ -35,21 +41,25 @@ export class Usuario {
     }
 }
 
-export class Laboratorio {
+// =====================================================
+// MODELO CANCHA
+// =====================================================
+
+export class Cancha {
     constructor({
         id,
         nombre,
-        sede,
+        complejo,
         capacidad,
-        equipos = [],
+        implementos = [],
         estado = 'disponible'
     } = {}) {
         Object.assign(this, {
             id,
             nombre,
-            sede,
+            complejo,
             capacidad,
-            equipos: [...equipos],
+            implementos: [...implementos],
             estado
         });
     }
@@ -58,18 +68,23 @@ export class Laboratorio {
         return this.estado === 'disponible';
     }
 
-    tieneEquipo(nombre) {
-        return this.equipos.some(
-            (equipo) => equipo.toLowerCase() === nombre.toLowerCase()
+    tieneImplemento(nombre) {
+        return this.implementos.some(
+            (implemento) =>
+                implemento.toLowerCase() === nombre.toLowerCase()
         );
     }
 }
+
+// =====================================================
+// MODELO RESERVA
+// =====================================================
 
 export class Reserva {
     constructor({
         id,
         codigo,
-        laboratorioId,
+        canchaId,
         usuarioId,
         fecha,
         horaInicio,
@@ -81,7 +96,7 @@ export class Reserva {
         Object.assign(this, {
             id,
             codigo,
-            laboratorioId,
+            canchaId,
             usuarioId,
             fecha,
             horaInicio,
@@ -104,13 +119,13 @@ export class Reserva {
 
     /**
      * Dos reservas se cruzan cuando:
-     * 1. Pertenecen al mismo laboratorio.
+     * 1. Pertenecen a la misma cancha.
      * 2. Corresponden a la misma fecha.
      * 3. Sus intervalos horarios se superponen.
      */
     seCruzaCon(otra) {
         return (
-            String(this.laboratorioId) === String(otra.laboratorioId) &&
+            String(this.canchaId) === String(otra.canchaId) &&
             this.fecha === otra.fecha &&
             aMinutos(this.horaInicio) < aMinutos(otra.horaFin) &&
             aMinutos(otra.horaInicio) < aMinutos(this.horaFin)

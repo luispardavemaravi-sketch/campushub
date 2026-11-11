@@ -1,7 +1,186 @@
-/* You can add global styles to this file, and also import other style files */
+
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
+:root {
+  --sport-dark: #102b27;
+  --sport-green: #1d5947;
+  --sport-lime: #b9f36a;
+  --sport-bg: #f4f7f4;
+  --sport-text: #20342b;
+  --sport-muted: #77867d;
+  --sport-border: #e5ece6;
+  --sport-radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
 body {
-  background-color: #f8f9fa;
   min-height: 100vh;
+  margin: 0;
+  background: var(--sport-bg);
+  color: var(--sport-text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: var(--sport-dark);
+  font-weight: 750;
+  letter-spacing: -0.5px;
+}
+
+.btn {
+  border-radius: 9px;
+  padding: 9px 15px;
+  font-size: 13px;
+  font-weight: 650;
+  transition: 0.2s ease;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--sport-green);
+  --bs-btn-border-color: var(--sport-green);
+  --bs-btn-hover-bg: var(--sport-dark);
+  --bs-btn-hover-border-color: var(--sport-dark);
+  --bs-btn-active-bg: var(--sport-dark);
+  --bs-btn-active-border-color: var(--sport-dark);
+}
+
+.btn-success {
+  --bs-btn-bg: var(--sport-green);
+  --bs-btn-border-color: var(--sport-green);
+}
+
+.form-control,
+.form-select {
+  min-height: 44px;
+  border: 1px solid var(--sport-border);
+  border-radius: 9px;
+  color: var(--sport-text);
+  font-size: 14px;
+  box-shadow: none;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #80b98e;
+  box-shadow: 0 0 0 3px rgba(29, 89, 71, 0.10);
+}
+
+.form-label {
+  margin-bottom: 7px;
+  color: #344b3e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.card {
+  border: 1px solid var(--sport-border);
+  border-radius: var(--sport-radius);
+  box-shadow: 0 5px 20px rgba(23, 54, 38, 0.035);
+}
+
+.table {
+  color: var(--sport-text);
+}
+
+.table > :not(caption) > * > * {
+  padding: 14px 12px;
+  border-bottom-color: #edf1ed;
+}
+
+.table thead th {
+  background: #f6f8f6;
+  color: #718078;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge {
+  padding: 7px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.page-heading {
+  margin-bottom: 25px;
+}
+
+.page-eyebrow {
+  margin-bottom: 7px;
+  color: var(--sport-green);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.page-description {
+  margin: 0;
+  color: var(--sport-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.surface-card {
+  overflow: hidden;
+  background: white;
+  border: 1px solid var(--sport-border);
+  border-radius: var(--sport-radius);
+  box-shadow: 0 5px 20px rgba(23, 54, 38, 0.035);
+}
+
+.section-title {
+  color: var(--sport-dark);
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.empty-state {
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--sport-muted);
+}
+
+.empty-state-icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 15px;
+  place-items: center;
+  border-radius: 18px;
+  background: #edf5e9;
+  font-size: 27px;
+}
+
+@media (max-width: 576px) {
+  .page-heading h1 {
+    font-size: 25px;
+  }
+
+  .table > :not(caption) > * > * {
+    padding: 11px 9px;
+  }
 }

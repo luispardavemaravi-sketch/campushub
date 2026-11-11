@@ -1,15 +1,26 @@
+
 /**
- * CampusHub - Validadores compartidos
+ * SportHub - Validadores compartidos.
  * Expresiones regulares y reglas de validación.
  */
 
+// =====================================================
+// VALIDACIONES DE USUARIO
+// =====================================================
+
+// Se conserva el correo institucional UTP del proyecto original.
 export const esCorreoUTP = (correo) =>
     typeof correo === 'string' &&
     /^[a-z\d._%+-]+@utp\.edu\.pe$/i.test(correo.trim());
 
-export const esCodigoAlumno = (codigo) =>
+// Se conserva el formato U + 8 dígitos solicitado en el proyecto.
+export const esCodigoCliente = (codigo) =>
     typeof codigo === 'string' &&
     /^U\d{8}$/.test(codigo.trim());
+
+// =====================================================
+// VALIDACIONES GENERALES
+// =====================================================
 
 export const esHora = (hora) =>
     typeof hora === 'string' &&
@@ -36,21 +47,28 @@ export const esFecha = (fecha) => {
     );
 };
 
-export const esNombreLaboratorio = (nombre) =>
+// =====================================================
+// VALIDACIONES DE CANCHA
+// =====================================================
+
+export const esNombreCancha = (nombre) =>
     typeof nombre === 'string' &&
     /^[\p{L}\p{N}][\p{L}\p{N}\s.\-]{2,59}$/u.test(nombre.trim());
 
-export function validarLaboratorio(datos = {}) {
+export function validarCancha(datos = {}) {
     const errores = [];
 
-    if (!esNombreLaboratorio(datos.nombre)) {
+    if (!esNombreCancha(datos.nombre)) {
         errores.push(
-            `El nombre del laboratorio debe tener entre 3 y 60 caracteres válidos.`
+            `El nombre de la cancha debe tener entre 3 y 60 caracteres válidos.`
         );
     }
 
-    if (typeof datos.sede !== 'string' || !datos.sede.trim()) {
-        errores.push(`La sede es obligatoria.`);
+    if (
+        typeof datos.complejo !== 'string' ||
+        !datos.complejo.trim()
+    ) {
+        errores.push(`El complejo deportivo es obligatorio.`);
     }
 
     if (
@@ -59,18 +77,19 @@ export function validarLaboratorio(datos = {}) {
         datos.capacidad > 60
     ) {
         errores.push(
-            `La capacidad debe ser un número entero entre 1 y 60.`
+            `La capacidad de jugadores debe ser un número entero entre 1 y 60.`
         );
     }
 
     if (
-        !Array.isArray(datos.equipos) ||
-        datos.equipos.some(
-            (equipo) => typeof equipo !== 'string' || !equipo.trim()
+        !Array.isArray(datos.implementos) ||
+        datos.implementos.some(
+            (implemento) =>
+                typeof implemento !== 'string' || !implemento.trim()
         )
     ) {
         errores.push(
-            `Los equipos deben ser un arreglo de nombres no vacíos.`
+            `Los implementos deben ser un arreglo de nombres no vacíos.`
         );
     }
 
@@ -83,22 +102,31 @@ export function validarLaboratorio(datos = {}) {
     return errores;
 }
 
+// =====================================================
+// VALIDACIONES DE RESERVA
+// =====================================================
+
 export function validarReserva(datos = {}) {
     const errores = [];
 
     if (
-        !Number.isInteger(datos.laboratorioId) ||
-        datos.laboratorioId <= 0
+        !Number.isInteger(datos.canchaId) ||
+        datos.canchaId <= 0
     ) {
-        errores.push(`Debes seleccionar un laboratorio válido.`);
+        errores.push(`Debes seleccionar una cancha válida.`);
     }
 
-    if (!Number.isInteger(datos.usuarioId) || datos.usuarioId <= 0) {
-        errores.push(`Debes identificar al estudiante.`);
+    if (
+        !Number.isInteger(datos.usuarioId) ||
+        datos.usuarioId <= 0
+    ) {
+        errores.push(`Debes identificar al cliente.`);
     }
 
     if (!esFecha(datos.fecha)) {
-        errores.push(`La fecha debe ser real y tener formato AAAA-MM-DD.`);
+        errores.push(
+            `La fecha debe ser real y tener formato AAAA-MM-DD.`
+        );
     }
 
     if (!esHora(datos.horaInicio)) {
@@ -119,8 +147,11 @@ export function validarReserva(datos = {}) {
         );
     }
 
-    if (typeof datos.motivo !== 'string' || !datos.motivo.trim()) {
-        errores.push(`El motivo es obligatorio.`);
+    if (
+        typeof datos.motivo !== 'string' ||
+        !datos.motivo.trim()
+    ) {
+        errores.push(`El motivo de la reserva es obligatorio.`);
     }
 
     if (

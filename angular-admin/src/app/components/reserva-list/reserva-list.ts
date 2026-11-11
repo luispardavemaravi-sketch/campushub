@@ -1,7 +1,15 @@
 
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  inject
+} from '@angular/core';
+
 import {
   AbstractControl,
   FormBuilder,
@@ -9,22 +17,32 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
+
 import { forkJoin } from 'rxjs';
 
-import { Reserva, ReservaPayload } from '../../models/reserva.model';
-import { Laboratorio } from '../../models/laboratorio.model';
+import {
+  Reserva,
+  ReservaPayload
+} from '../../models/reserva.model';
+
+import { Cancha } from '../../models/cancha.model';
 import { Usuario } from '../../models/usuario.model';
 
 import { ReservaService } from '../../services/reserva';
-import { LaboratorioService } from '../../services/laboratorio';
+import { CanchaService } from '../../services/cancha';
 
 import { EstadoReservaPipe } from '../../pipes/estado-reserva-pipe';
-import { ResaltarMantenimientoDirective } from '../../directives/resaltar-mantenimiento';
+
+import {
+  ResaltarMantenimientoDirective
+} from '../../directives/resaltar-mantenimiento';
+
 import { API_BASE_URL } from '../../config/api.config';
 
 interface ReservaVista extends Reserva {
-  laboratorioNombre: string;
-  laboratorioEstado: string;
+  canchaNombre: string;
+  complejoNombre: string;
+  canchaEstado: string;
   usuarioNombre: string;
 }
 
@@ -33,6 +51,7 @@ interface ReservaVista extends Reserva {
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     EstadoReservaPipe,
     ResaltarMantenimientoDirective
@@ -47,23 +66,37 @@ export class ReservaList implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
 
   private readonly reservaService = inject(ReservaService);
-  private readonly laboratorioService = inject(LaboratorioService);
+  private readonly canchaService = inject(CanchaService);
 
   reservas: ReservaVista[] = [];
-  laboratorios: Laboratorio[] = [];
-  estudiantes: Usuario[] = [];
+
+  canchas: Cancha[] = [];
+
+  clientes: Usuario[] = [];
 
   cargando = false;
   guardando = false;
-  cancelandoId: number | null = null;
+
+  // Solo se bloquean los botones de la reserva actualizada.
+  actualizandoIds = new Set<number>();
+
+  // Filtro por estado.
+  filtroEstado:
+    | 'todos'
+    | 'pendiente'
+    | 'aprobada'
+    | 'rechazada'
+    | 'cancelada' = 'todos';
+
   mostrandoFormulario = false;
 
   mensaje = '';
   errorCarga = '';
   errorFormulario = '';
 
-  busquedaEstudiante = '';
-  estudianteSeleccionado: Usuario | null = null;
+  busquedaCliente = '';
+
+  clienteSeleccionado: Usuario | null = null;
 
   readonly fechaMinima = this.obtenerFechaLocal();
 
@@ -73,7 +106,7 @@ export class ReservaList implements OnInit {
 
   formulario = this.fb.group(
     {
-      laboratorioId: [
+      canchaId: [
         null as number | null,
         Validators.required
       ],
@@ -114,41 +147,46 @@ export class ReservaList implements OnInit {
       ]
     },
     {
-      validators: [this.validarDuracion.bind(this)]
+      validators: [
+        this.validarDuracion.bind(this)
+      ]
     }
   );
 
   ngOnInit(): void {
     this.configurarHoraFinAutomatica();
-
-    // Carga automáticamente las reservas al entrar al componente.
     this.cargarDatos();
   }
 
   // =====================================================
-  // CARGAR DATOS AL ENTRAR AL APARTADO DE RESERVAS
+  // CARGAR RESERVAS, CANCHAS Y CLIENTES
   // =====================================================
 
   cargarDatos(): void {
 
     this.cargando = true;
     this.errorCarga = '';
+
     this.cdr.detectChanges();
 
     forkJoin({
+
       reservas: this.reservaService.listar(),
-      laboratorios: this.laboratorioService.listar(),
+
+      canchas: this.canchaService.listar(),
+
       usuarios: this.http.get<Usuario[]>(
         `${API_BASE_URL}/usuarios`
       )
+
     }).subscribe({
 
-      next: ({ reservas, laboratorios, usuarios }) => {
+      next: ({ reservas, canchas, usuarios }) => {
 
-        this.laboratorios = laboratorios;
+        this.canchas = canchas;
 
-        this.estudiantes = usuarios.filter(
-          usuario => usuario.rol === 'estudiante'
+        this.clientes = usuarios.filter(
+          usuario => usuario.rol === 'cliente'
         );
 
         this.reservas = reservas
@@ -162,6 +200,7 @@ export class ReservaList implements OnInit {
           );
 
         this.cargando = false;
+
         this.cdr.detectChanges();
       },
 
@@ -170,66 +209,94 @@ export class ReservaList implements OnInit {
         console.error('Error al cargar reservas:', error);
 
         this.errorCarga =
-          'No se pudieron cargar las reservas. Verifica que el API esté ejecutándose.';
+          'No se pudieron cargar las reservas. Verifica que JSON Server esté ejecutándose.';
 
         this.cargando = false;
+
         this.cdr.detectChanges();
       }
     });
   }
 
   // =====================================================
-  // BÚSQUEDA DE ESTUDIANTES POR NOMBRE O CÓDIGO
+  // FILTRO DE RESERVAS
   // =====================================================
 
-  get estudiantesEncontrados(): Usuario[] {
+  get reservasFiltradas(): ReservaVista[] {
+
+    if (this.filtroEstado === 'todos') {
+      return this.reservas;
+    }
+
+    return this.reservas.filter(
+      reserva => reserva.estado === this.filtroEstado
+    );
+  }
+
+  // =====================================================
+  // BÚSQUEDA DE CLIENTES
+  // =====================================================
+
+  get clientesEncontrados(): Usuario[] {
 
     const texto = this.normalizarTexto(
-      this.busquedaEstudiante.trim()
+      this.busquedaCliente.trim()
     );
 
-    if (!texto || this.estudianteSeleccionado) {
+    if (!texto || this.clienteSeleccionado) {
       return [];
     }
 
-    return this.estudiantes
-      .filter(estudiante => {
+    return this.clientes
+      .filter(cliente => {
 
         const nombre = this.normalizarTexto(
-          estudiante.nombre
+          cliente.nombre
         );
 
         const codigo = this.normalizarTexto(
-          estudiante.codigo
+          cliente.codigo
         );
 
-        return nombre.includes(texto) || codigo.includes(texto);
+        return (
+          nombre.includes(texto) ||
+          codigo.includes(texto)
+        );
       })
       .slice(0, 8);
   }
 
-  actualizarBusquedaEstudiante(valor: string): void {
+  actualizarBusquedaCliente(valor: string): void {
 
-    this.busquedaEstudiante = valor;
+    this.busquedaCliente = valor;
 
-    if (this.estudianteSeleccionado) {
-      this.estudianteSeleccionado = null;
+    if (this.clienteSeleccionado) {
+
+      this.clienteSeleccionado = null;
+
       this.formulario.controls.usuarioId.setValue(null);
     }
   }
 
-  seleccionarEstudiante(estudiante: Usuario): void {
+  seleccionarCliente(cliente: Usuario): void {
 
-    this.estudianteSeleccionado = estudiante;
-    this.busquedaEstudiante = '';
-    this.formulario.controls.usuarioId.setValue(estudiante.id);
+    this.clienteSeleccionado = cliente;
+
+    this.busquedaCliente = '';
+
+    this.formulario.controls.usuarioId.setValue(
+      cliente.id
+    );
+
     this.formulario.controls.usuarioId.markAsTouched();
   }
 
-  quitarEstudianteSeleccionado(): void {
+  quitarClienteSeleccionado(): void {
 
-    this.estudianteSeleccionado = null;
-    this.busquedaEstudiante = '';
+    this.clienteSeleccionado = null;
+
+    this.busquedaCliente = '';
+
     this.formulario.controls.usuarioId.setValue(null);
   }
 
@@ -242,7 +309,7 @@ export class ReservaList implements OnInit {
   }
 
   // =====================================================
-  // HORA DE FIN AUTOMÁTICA: 30 MINUTOS DESPUÉS
+  // HORA DE FIN AUTOMÁTICA
   // =====================================================
 
   private configurarHoraFinAutomatica(): void {
@@ -251,7 +318,9 @@ export class ReservaList implements OnInit {
       horaInicio => {
 
         if (!horaInicio) {
+
           this.formulario.controls.horaFin.setValue('');
+
           return;
         }
 
@@ -260,9 +329,12 @@ export class ReservaList implements OnInit {
         }
 
         const minutosInicio = this.aMinutos(horaInicio);
-        const minutosFin = minutosInicio + this.duracionMinima;
+
+        const minutosFin =
+          minutosInicio + this.duracionMinima;
 
         const horas = Math.floor(minutosFin / 60);
+
         const minutos = minutosFin % 60;
 
         const horaFinAutomatica =
@@ -272,14 +344,13 @@ export class ReservaList implements OnInit {
           horaFinAutomatica
         );
 
-        this.formulario.controls.horaFin.markAsTouched();
         this.formulario.updateValueAndValidity();
       }
     );
   }
 
   // =====================================================
-  // VALIDAR HORARIO ENTRE 07:30 Y 22:00
+  // VALIDAR HORARIO DE ATENCIÓN
   // =====================================================
 
   private validarHora(
@@ -288,12 +359,13 @@ export class ReservaList implements OnInit {
 
     const valor = control.value;
 
-    if (!valor) {
-      return null;
-    }
+    if (!valor) return null;
 
     if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(valor)) {
-      return { horaInvalida: true };
+
+      return {
+        horaInvalida: true
+      };
     }
 
     const minutos = this.aMinutos(valor);
@@ -302,14 +374,17 @@ export class ReservaList implements OnInit {
       minutos < this.aMinutos(this.horaMinima) ||
       minutos > this.aMinutos(this.horaMaxima)
     ) {
-      return { fueraDeHorario: true };
+
+      return {
+        fueraDeHorario: true
+      };
     }
 
     return null;
   }
 
   // =====================================================
-  // VALIDAR DURACIÓN MÍNIMA DE 30 MINUTOS
+  // VALIDAR DURACIÓN MÍNIMA
   // =====================================================
 
   private validarDuracion(
@@ -317,11 +392,10 @@ export class ReservaList implements OnInit {
   ): ValidationErrors | null {
 
     const inicio = grupo.get('horaInicio')?.value;
+
     const fin = grupo.get('horaFin')?.value;
 
-    if (!inicio || !fin) {
-      return null;
-    }
+    if (!inicio || !fin) return null;
 
     if (
       !/^([01]\d|2[0-3]):[0-5]\d$/.test(inicio) ||
@@ -334,7 +408,10 @@ export class ReservaList implements OnInit {
       this.aMinutos(fin) - this.aMinutos(inicio);
 
     if (diferencia < this.duracionMinima) {
-      return { duracionMinima: true };
+
+      return {
+        duracionMinima: true
+      };
     }
 
     return null;
@@ -349,36 +426,46 @@ export class ReservaList implements OnInit {
     this.mensaje = '';
     this.errorFormulario = '';
 
-    this.estudianteSeleccionado = null;
-    this.busquedaEstudiante = '';
+    this.clienteSeleccionado = null;
+    this.busquedaCliente = '';
 
     this.formulario.reset({
-      laboratorioId: null,
+
+      canchaId: null,
       usuarioId: null,
       fecha: this.fechaMinima,
       horaInicio: '',
       horaFin: '',
       motivo: ''
+
     });
 
     this.mostrandoFormulario = true;
   }
 
+  // =====================================================
+  // CERRAR FORMULARIO
+  // =====================================================
+
   cerrarFormulario(): void {
 
     this.mostrandoFormulario = false;
+
     this.errorFormulario = '';
 
-    this.estudianteSeleccionado = null;
-    this.busquedaEstudiante = '';
+    this.clienteSeleccionado = null;
+
+    this.busquedaCliente = '';
 
     this.formulario.reset({
-      laboratorioId: null,
+
+      canchaId: null,
       usuarioId: null,
       fecha: this.fechaMinima,
       horaInicio: '',
       horaFin: '',
       motivo: ''
+
     });
   }
 
@@ -403,50 +490,61 @@ export class ReservaList implements OnInit {
 
     const valores = this.formulario.getRawValue();
 
-    const laboratorioId = Number(valores.laboratorioId);
+    const canchaId = Number(valores.canchaId);
+
     const usuarioId = Number(valores.usuarioId);
 
-    const laboratorio = this.laboratorios.find(
-      item => item.id === laboratorioId
+    const cancha = this.canchas.find(
+      item => item.id === canchaId
     );
 
-    if (!laboratorio) {
+    if (!cancha) {
 
       this.errorFormulario =
-        'Selecciona un laboratorio válido.';
+        'Selecciona una cancha válida.';
 
       return;
     }
 
-    if (laboratorio.estado === 'mantenimiento') {
+    if (cancha.estado === 'mantenimiento') {
 
       this.errorFormulario =
-        'No puedes reservar un laboratorio en mantenimiento.';
+        'No puedes reservar una cancha que está en mantenimiento.';
 
       return;
     }
 
     const nuevaReservaBase = {
-      laboratorioId,
+
+      canchaId,
+
       usuarioId,
+
       fecha: valores.fecha!,
+
       horaInicio: valores.horaInicio!,
+
       horaFin: valores.horaFin!,
+
       motivo: valores.motivo!.trim(),
+
       estado: 'pendiente' as const
     };
 
     if (this.existeCruce(nuevaReservaBase)) {
 
       this.errorFormulario =
-        'Ya existe una reserva en ese laboratorio y horario.';
+        'Ya existe una reserva para esa cancha, fecha y horario.';
 
       return;
     }
 
     const payload: ReservaPayload = {
+
       ...nuevaReservaBase,
+
       codigo: this.generarCodigo(),
+
       creadoEn: new Date().toISOString()
     };
 
@@ -457,8 +555,11 @@ export class ReservaList implements OnInit {
       next: reservaCreada => {
 
         this.reservas = [
+
           this.convertirVista(reservaCreada),
+
           ...this.reservas
+
         ].sort((a, b) =>
           b.codigo.localeCompare(
             a.codigo,
@@ -468,6 +569,7 @@ export class ReservaList implements OnInit {
         );
 
         this.guardando = false;
+
         this.cerrarFormulario();
 
         this.mensaje =
@@ -487,54 +589,80 @@ export class ReservaList implements OnInit {
   }
 
   // =====================================================
-  // CANCELAR RESERVA
+  // APROBAR / RECHAZAR RESERVA
   // =====================================================
 
-  cancelarReserva(reserva: ReservaVista): void {
+  cambiarEstadoReserva(
+    reserva: ReservaVista,
+    nuevoEstado: 'aprobada' | 'rechazada'
+  ): void {
 
-    if (this.cancelandoId !== null) {
+    if (this.actualizandoIds.has(reserva.id)) return;
+
+    if (reserva.estado !== 'pendiente') return;
+
+    // No se permite aprobar una reserva cuya cancha
+    // actualmente se encuentre en mantenimiento.
+    if (
+      nuevoEstado === 'aprobada' &&
+      reserva.canchaEstado === 'mantenimiento'
+    ) {
+
+      this.errorCarga =
+        'No se puede aprobar esta reserva porque la cancha está en mantenimiento. Recházala o espera a que vuelva a estar disponible.';
+
       return;
     }
+
+    const accion = nuevoEstado === 'aprobada'
+      ? 'aprobar'
+      : 'rechazar';
 
     const confirmar = window.confirm(
-      `¿Deseas cancelar la reserva ${reserva.codigo}?`
+      `¿Deseas ${accion} la reserva ${reserva.codigo}?`
     );
 
-    if (!confirmar) {
-      return;
-    }
+    if (!confirmar) return;
 
-    const reservasAnteriores = [...this.reservas];
+    this.actualizandoIds.add(reserva.id);
 
-    // Se elimina visualmente de inmediato.
-    this.reservas = this.reservas.filter(
-      item => item.id !== reserva.id
-    );
-
-    this.cancelandoId = reserva.id;
     this.mensaje = '';
     this.errorCarga = '';
 
-    this.reservaService.cancelar(reserva.id).subscribe({
+    this.reservaService.cambiarEstado(
+      reserva.id,
+      nuevoEstado
+    ).subscribe({
 
-      next: () => {
+      next: reservaActualizada => {
 
-        this.cancelandoId = null;
+        this.reservas = this.reservas.map(item =>
+          item.id === reserva.id
+            ? this.convertirVista({
+                ...item,
+                ...reservaActualizada
+              })
+            : item
+        );
+
+        this.actualizandoIds.delete(reserva.id);
 
         this.mensaje =
-          `La reserva ${reserva.codigo} fue cancelada correctamente.`;
+          `La reserva ${reserva.codigo} fue ${nuevoEstado} correctamente.`;
+
+        this.cdr.detectChanges();
       },
 
       error: error => {
 
-        console.error('Error al cancelar reserva:', error);
+        console.error(`Error al ${accion} reserva:`, error);
 
-        // Si falla el DELETE, se recupera la reserva.
-        this.reservas = reservasAnteriores;
-        this.cancelandoId = null;
+        this.actualizandoIds.delete(reserva.id);
 
         this.errorCarga =
-          'No se pudo cancelar la reserva. La reserva se ha restaurado en la lista.';
+          `No se pudo ${accion} la reserva ${reserva.codigo}. Inténtalo nuevamente.`;
+
+        this.cdr.detectChanges();
       }
     });
   }
@@ -543,27 +671,33 @@ export class ReservaList implements OnInit {
   // CONVERTIR RESERVA A VISTA
   // =====================================================
 
-  private convertirVista(reserva: Reserva): ReservaVista {
+  private convertirVista(
+    reserva: Reserva
+  ): ReservaVista {
 
-    const laboratorio = this.laboratorios.find(
-      item => item.id === reserva.laboratorioId
+    const cancha = this.canchas.find(
+      item => item.id === reserva.canchaId
     );
 
-    const usuario = this.estudiantes.find(
+    const cliente = this.clientes.find(
       item => item.id === reserva.usuarioId
     );
 
     return {
+
       ...reserva,
 
-      laboratorioNombre:
-        laboratorio?.nombre ?? `Laboratorio #${reserva.laboratorioId}`,
+      canchaNombre:
+        cancha?.nombre ?? `Cancha #${reserva.canchaId}`,
 
-      laboratorioEstado:
-        laboratorio?.estado ?? 'disponible',
+      complejoNombre:
+        cancha?.complejo ?? 'Complejo no disponible',
+
+      canchaEstado:
+        cancha?.estado ?? 'disponible',
 
       usuarioNombre:
-        usuario?.nombre ?? `Usuario #${reserva.usuarioId}`
+        cliente?.nombre ?? `Cliente #${reserva.usuarioId}`
     };
   }
 
@@ -574,19 +708,25 @@ export class ReservaList implements OnInit {
   private existeCruce(
     nueva: Pick<
       Reserva,
-      'laboratorioId' | 'fecha' | 'horaInicio' | 'horaFin'
+      'canchaId' | 'fecha' | 'horaInicio' | 'horaFin'
     >
   ): boolean {
 
-    const inicioNuevo = this.aMinutos(nueva.horaInicio);
-    const finNuevo = this.aMinutos(nueva.horaFin);
+    const inicioNuevo = this.aMinutos(
+      nueva.horaInicio
+    );
+
+    const finNuevo = this.aMinutos(
+      nueva.horaFin
+    );
 
     return this.reservas.some(reserva => {
 
       if (
-        reserva.laboratorioId !== nueva.laboratorioId ||
+        reserva.canchaId !== nueva.canchaId ||
         reserva.fecha !== nueva.fecha ||
-        reserva.estado === 'rechazada'
+        reserva.estado === 'rechazada' ||
+        reserva.estado === 'cancelada'
       ) {
         return false;
       }
@@ -607,20 +747,22 @@ export class ReservaList implements OnInit {
   }
 
   // =====================================================
-  // GENERAR CÓDIGO AUTOMÁTICO
+  // GENERAR CÓDIGO DE RESERVA
   // =====================================================
 
   private generarCodigo(): string {
 
-    const mayor = this.reservas.reduce((maximo, reserva) => {
+    const mayor = this.reservas.reduce(
+      (maximo, reserva) => {
 
-      const numero = Number(
-        reserva.codigo.match(/^RES-(\d+)$/)?.[1] ?? 0
-      );
+        const numero = Number(
+          reserva.codigo.match(/^RES-(\d+)$/)?.[1] ?? 0
+        );
 
-      return Math.max(maximo, numero);
-
-    }, 0);
+        return Math.max(maximo, numero);
+      },
+      0
+    );
 
     return `RES-${String(mayor + 1).padStart(4, '0')}`;
   }
@@ -637,7 +779,7 @@ export class ReservaList implements OnInit {
   }
 
   // =====================================================
-  // OBTENER FECHA LOCAL
+  // FECHA LOCAL
   // =====================================================
 
   private obtenerFechaLocal(): string {
@@ -658,7 +800,29 @@ export class ReservaList implements OnInit {
   }
 
   // =====================================================
-  // CLASES PARA LOS ESTADOS
+  // ESTADÍSTICAS
+  // =====================================================
+
+  get totalReservas(): number {
+    return this.reservas.length;
+  }
+
+  get reservasPendientes(): number {
+
+    return this.reservas.filter(
+      reserva => reserva.estado === 'pendiente'
+    ).length;
+  }
+
+  get reservasAprobadas(): number {
+
+    return this.reservas.filter(
+      reserva => reserva.estado === 'aprobada'
+    ).length;
+  }
+
+  // =====================================================
+  // CLASE VISUAL DE ESTADO
   // =====================================================
 
   obtenerClaseEstado(estado: string): string {
@@ -666,16 +830,141 @@ export class ReservaList implements OnInit {
     switch (estado) {
 
       case 'aprobada':
-        return 'bg-success';
+        return 'reservation-approved';
 
       case 'pendiente':
-        return 'bg-warning text-dark';
+        return 'reservation-pending';
 
       case 'rechazada':
-        return 'bg-danger';
+        return 'reservation-rejected';
+
+      case 'cancelada':
+        return 'reservation-cancelled';
 
       default:
-        return 'bg-secondary';
+        return '';
     }
   }
+
+  // =====================================================
+// COMPROBAR SI UNA RESERVA PUEDE RESTAURARSE
+// =====================================================
+
+puedeRestaurarReserva(reserva: ReservaVista): boolean {
+
+  if (reserva.estado !== 'cancelada') {
+    return false;
+  }
+
+  const cancha = this.canchas.find(
+    item => Number(item.id) === Number(reserva.canchaId)
+  );
+
+  if (!cancha || cancha.estado !== 'disponible') {
+    return false;
+  }
+
+  const fechaHoraInicio = new Date(
+    `${reserva.fecha}T${reserva.horaInicio}:00`
+  );
+
+  return fechaHoraInicio > new Date();
+}
+
+// =====================================================
+// RESTAURAR UNA RESERVA CANCELADA
+// =====================================================
+
+restaurarReserva(reserva: ReservaVista): void {
+
+  if (!this.puedeRestaurarReserva(reserva)) {
+    return;
+  }
+
+  const existeCruce = this.reservas.some(otra => {
+
+    if (
+      otra.id === reserva.id ||
+      otra.canchaId !== reserva.canchaId ||
+      otra.fecha !== reserva.fecha ||
+      otra.estado === 'cancelada' ||
+      otra.estado === 'rechazada'
+    ) {
+      return false;
+    }
+
+    const inicioNueva = this.aMinutos(reserva.horaInicio);
+    const finNueva = this.aMinutos(reserva.horaFin);
+
+    const inicioOtra = this.aMinutos(otra.horaInicio);
+    const finOtra = this.aMinutos(otra.horaFin);
+
+    return (
+      inicioNueva < finOtra &&
+      inicioOtra < finNueva
+    );
+  });
+
+  if (existeCruce) {
+
+    this.errorCarga =
+      'No se puede restaurar esta reserva porque el horario ya está ocupado por otra reserva pendiente o aprobada.';
+
+    return;
+  }
+
+  const confirmar = window.confirm(
+    `¿Deseas restaurar la reserva ${reserva.codigo} y cambiar su estado a aprobada?`
+  );
+
+  if (!confirmar) return;
+
+  this.actualizandoIds.add(reserva.id);
+
+  this.errorCarga = '';
+  this.mensaje = '';
+
+  this.reservaService.cambiarEstado(
+    reserva.id,
+    'aprobada',
+    {
+      restauradaEn: new Date().toISOString(),
+      restauradaPor: 'Administrador',
+      motivoRestauracion:
+        'Reserva restaurada por el administrador después de verificar la disponibilidad de la cancha.'
+    }
+  ).subscribe({
+
+    next: reservaActualizada => {
+
+      this.reservas = this.reservas.map(item =>
+        item.id === reserva.id
+          ? this.convertirVista({
+              ...item,
+              ...reservaActualizada
+            })
+          : item
+      );
+
+      this.actualizandoIds.delete(reserva.id);
+
+      this.mensaje =
+        `La reserva ${reserva.codigo} fue restaurada correctamente.`;
+
+      this.cdr.detectChanges();
+    },
+
+    error: error => {
+
+      console.error('Error al restaurar reserva:', error);
+
+      this.actualizandoIds.delete(reserva.id);
+
+      this.errorCarga =
+        'No se pudo restaurar la reserva. Inténtalo nuevamente.';
+
+      this.cdr.detectChanges();
+    }
+  });
+}
 }

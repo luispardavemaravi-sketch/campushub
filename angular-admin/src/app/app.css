@@ -1,0 +1,46 @@
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  padding: 34px 0 55px;
+}
+
+.app-container {
+  width: min(1440px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.app-footer {
+  padding: 22px 0;
+  border-top: 1px solid #e8eee9;
+  background: #ffffff;
+  color: #78877e;
+  font-size: 13px;
+}
+
+.app-footer .app-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 576px) {
+  .app-container {
+    width: calc(100% - 28px);
+  }
+
+  .app-main {
+    padding-top: 24px;
+  }
+
+  .app-footer .app-container {
+    flex-direction: column;
+    text-align: center;
+  }
+}

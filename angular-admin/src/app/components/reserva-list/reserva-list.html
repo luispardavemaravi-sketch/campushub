@@ -1,162 +1,194 @@
-<section class="container py-4">
+
+<section class="reservation-page">
 
   <!-- ENCABEZADO -->
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+  <div class="page-heading d-flex justify-content-between align-items-end flex-wrap gap-3">
 
     <div>
-      <h2 class="fw-bold mb-1">
-        Gestión de reservas
-      </h2>
+      <div class="page-eyebrow">
+        Administración deportiva
+      </div>
 
-      <p class="text-secondary mb-0">
-        Consulta, registra y cancela las reservas de laboratorios.
+      <h1 class="mb-2">
+        Gestión de reservas
+      </h1>
+
+      <p class="page-description">
+        Administra las reservas de los clientes y controla los horarios de las canchas.
       </p>
     </div>
 
     <button
-      class="btn btn-primary"
       type="button"
+      class="btn btn-primary"
       (click)="abrirFormulario()"
-      [disabled]="mostrandoFormulario">
-
-      + Nueva reserva
-
+      [disabled]="cargando"
+    >
+      ＋ Nueva reserva
     </button>
 
   </div>
 
-  <!-- MENSAJE DE ÉXITO -->
+  <!-- MENSAJES -->
   @if (mensaje) {
-
-    <div class="alert alert-success alert-dismissible">
-
-      {{ mensaje }}
-
-      <button
-        type="button"
-        class="btn-close"
-        (click)="mensaje = ''">
-      </button>
-
+    <div class="alert alert-success border-0 rounded-3">
+      ✓ {{ mensaje }}
     </div>
-
   }
 
-  <!-- MENSAJE DE ERROR DE CARGA O CANCELACIÓN -->
   @if (errorCarga) {
-
-    <div class="alert alert-danger">
-
+    <div class="alert alert-danger border-0 rounded-3">
       {{ errorCarga }}
 
       <button
         type="button"
         class="btn btn-sm btn-outline-danger ms-2"
-        (click)="cargarDatos()">
-
-        Volver a intentar
-
+        (click)="cargarDatos()"
+      >
+        Reintentar
       </button>
-
     </div>
-
   }
 
-  <!-- FORMULARIO -->
+  <!-- ESTADÍSTICAS -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-12 col-sm-4">
+      <div class="reservation-stat">
+        <div class="reservation-stat-icon">▣</div>
+
+        <div>
+          <span>Total de reservas</span>
+          <strong>{{ totalReservas }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-4">
+      <div class="reservation-stat">
+        <div class="reservation-stat-icon pending-icon">◷</div>
+
+        <div>
+          <span>Pendientes</span>
+          <strong>{{ reservasPendientes }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-4">
+      <div class="reservation-stat">
+        <div class="reservation-stat-icon approved-icon">✓</div>
+
+        <div>
+          <span>Aprobadas</span>
+          <strong>{{ reservasAprobadas }}</strong>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FORMULARIO DE RESERVA -->
   @if (mostrandoFormulario) {
 
-    <div class="card shadow-sm border-0 mb-4">
+    <div class="surface-card reservation-form-card mb-4">
 
-      <div class="card-header bg-primary text-white">
+      <div class="reservation-form-header">
 
-        <h5 class="mb-0">
-          Registrar nueva reserva
-        </h5>
+        <div class="reservation-form-icon">📅</div>
+
+        <div>
+          <h5 class="mb-1">
+            Registrar nueva reserva
+          </h5>
+
+          <p class="text-secondary small mb-0">
+            Completa la información para reservar una cancha deportiva.
+          </p>
+        </div>
 
       </div>
 
-      <div class="card-body">
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="registrarReserva()"
+        novalidate
+      >
 
-        @if (errorFormulario) {
+        <div class="reservation-form-body">
 
-          <div class="alert alert-danger">
-            {{ errorFormulario }}
-          </div>
+          @if (errorFormulario) {
+            <div class="alert alert-danger border-0 rounded-3">
+              {{ errorFormulario }}
+            </div>
+          }
 
-        }
+          <div class="row g-4">
 
-        <form
-          [formGroup]="formulario"
-          (ngSubmit)="registrarReserva()"
-          novalidate>
+            <!-- CANCHA -->
+            <div class="col-12 col-md-6">
 
-          <div class="row g-3">
-
-            <!-- LABORATORIO -->
-            <div class="col-md-6">
-
-              <label class="form-label">
-                Laboratorio
+              <label class="form-label" for="canchaId">
+                Cancha deportiva *
               </label>
 
               <select
+                id="canchaId"
                 class="form-select"
-                formControlName="laboratorioId"
-                [class.is-invalid]="formulario.controls.laboratorioId.invalid && formulario.controls.laboratorioId.touched">
+                formControlName="canchaId"
+                [class.is-invalid]="formulario.controls.canchaId.invalid && formulario.controls.canchaId.touched"
+              >
 
                 <option [ngValue]="null">
-                  Selecciona un laboratorio
+                  Selecciona una cancha
                 </option>
 
-                @for (laboratorio of laboratorios; track laboratorio.id) {
-
+                @for (cancha of canchas; track cancha.id) {
                   <option
-                    [ngValue]="laboratorio.id"
-                    [disabled]="laboratorio.estado === 'mantenimiento'">
+                    [ngValue]="cancha.id"
+                    [disabled]="cancha.estado === 'mantenimiento'"
+                  >
+                    {{ cancha.nombre }} — {{ cancha.complejo }}
 
-                    {{ laboratorio.nombre }} - {{ laboratorio.sede }}
-
-                    @if (laboratorio.estado === 'mantenimiento') {
-                      (En mantenimiento)
-                    }
-
+                    {{ cancha.estado === 'mantenimiento'
+                      ? '(En mantenimiento)'
+                      : ''
+                    }}
                   </option>
-
                 }
 
               </select>
 
-              @if (formulario.controls.laboratorioId.invalid && formulario.controls.laboratorioId.touched) {
-
+              @if (formulario.controls.canchaId.invalid && formulario.controls.canchaId.touched) {
                 <div class="invalid-feedback">
-                  Selecciona un laboratorio.
+                  Selecciona una cancha disponible.
                 </div>
-
               }
 
             </div>
 
-            <!-- ESTUDIANTE -->
-            <div class="col-md-6">
+            <!-- CLIENTE -->
+            <div class="col-12 col-md-6">
 
               <label class="form-label">
-                Estudiante
+                Cliente *
               </label>
 
-              @if (estudianteSeleccionado; as estudiante) {
+              @if (clienteSeleccionado; as cliente) {
 
-                <div class="selected-student form-control d-flex justify-content-between align-items-center">
+                <div class="selected-client">
 
-                  <span>
-                    {{ estudiante.nombre }} ({{ estudiante.codigo }})
-                  </span>
+                  <div>
+                    <strong>{{ cliente.nombre }}</strong>
+                    <small>{{ cliente.codigo }}</small>
+                  </div>
 
                   <button
                     type="button"
                     class="btn-close"
-                    aria-label="Quitar estudiante"
-                    (click)="quitarEstudianteSeleccionado()">
-                  </button>
+                    aria-label="Quitar cliente"
+                    (click)="quitarClienteSeleccionado()"
+                  ></button>
 
                 </div>
 
@@ -165,37 +197,31 @@
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Buscar por nombre o código del estudiante"
-                  [value]="busquedaEstudiante"
-                  (input)="actualizarBusquedaEstudiante($any($event.target).value)">
+                  placeholder="Buscar por nombre o código"
+                  [value]="busquedaCliente"
+                  (input)="actualizarBusquedaCliente($any($event.target).value)"
+                >
 
-                @if (estudiantesEncontrados.length > 0) {
+                @if (clientesEncontrados.length > 0) {
 
-                  <div class="student-search-results list-group mt-1">
+                  <div class="client-search-results">
 
-                    @for (estudiante of estudiantesEncontrados; track estudiante.id) {
-
+                    @for (cliente of clientesEncontrados; track cliente.id) {
                       <button
                         type="button"
-                        class="list-group-item list-group-item-action"
-                        (click)="seleccionarEstudiante(estudiante)">
-
-                        <strong>{{ estudiante.nombre }}</strong>
-
-                        <small class="text-secondary ms-2">
-                          {{ estudiante.codigo }}
-                        </small>
-
+                        (click)="seleccionarCliente(cliente)"
+                      >
+                        <strong>{{ cliente.nombre }}</strong>
+                        <small>{{ cliente.codigo }}</small>
                       </button>
-
                     }
 
                   </div>
 
-                } @else if (busquedaEstudiante.trim()) {
+                } @else if (busquedaCliente.trim()) {
 
                   <small class="text-secondary d-block mt-2">
-                    No se encontraron estudiantes con ese nombre o código.
+                    No se encontraron clientes.
                   </small>
 
                 }
@@ -203,53 +229,53 @@
               }
 
               @if (formulario.controls.usuarioId.invalid && formulario.controls.usuarioId.touched) {
-
-                <div class="text-danger small mt-1">
-                  Selecciona un estudiante de la búsqueda.
+                <div class="text-danger small mt-2">
+                  Selecciona un cliente de la búsqueda.
                 </div>
-
               }
 
             </div>
 
             <!-- FECHA -->
-            <div class="col-md-4">
+            <div class="col-12 col-md-4">
 
-              <label class="form-label">
-                Fecha
+              <label class="form-label" for="fecha">
+                Fecha de reserva *
               </label>
 
               <input
+                id="fecha"
                 type="date"
                 class="form-control"
                 formControlName="fecha"
                 [min]="fechaMinima"
-                [class.is-invalid]="formulario.controls.fecha.invalid && formulario.controls.fecha.touched">
+                [class.is-invalid]="formulario.controls.fecha.invalid && formulario.controls.fecha.touched"
+              >
 
               @if (formulario.controls.fecha.invalid && formulario.controls.fecha.touched) {
-
                 <div class="invalid-feedback">
                   Selecciona una fecha válida.
                 </div>
-
               }
 
             </div>
 
-            <!-- HORA DE INICIO -->
-            <div class="col-md-4">
+            <!-- HORA INICIO -->
+            <div class="col-12 col-md-4">
 
-              <label class="form-label">
-                Hora de inicio
+              <label class="form-label" for="horaInicio">
+                Hora de inicio *
               </label>
 
               <input
+                id="horaInicio"
                 type="time"
                 class="form-control"
                 min="07:30"
                 max="22:00"
                 formControlName="horaInicio"
-                [class.is-invalid]="formulario.controls.horaInicio.invalid && formulario.controls.horaInicio.touched">
+                [class.is-invalid]="formulario.controls.horaInicio.invalid && formulario.controls.horaInicio.touched"
+              >
 
               @if (formulario.controls.horaInicio.hasError('required') && formulario.controls.horaInicio.touched) {
 
@@ -267,23 +293,25 @@
 
             </div>
 
-            <!-- HORA DE FIN -->
-            <div class="col-md-4">
+            <!-- HORA FIN -->
+            <div class="col-12 col-md-4">
 
-              <label class="form-label">
-                Hora de fin
+              <label class="form-label" for="horaFin">
+                Hora de fin *
               </label>
 
               <input
+                id="horaFin"
                 type="time"
                 class="form-control"
                 min="07:30"
                 max="22:00"
                 formControlName="horaFin"
-                [class.is-invalid]="formulario.controls.horaFin.invalid && formulario.controls.horaFin.touched">
+                [class.is-invalid]="formulario.controls.horaFin.invalid && formulario.controls.horaFin.touched"
+              >
 
               <small class="text-secondary d-block mt-1">
-                Se completa automáticamente 30 minutos después de la hora de inicio.
+                Se completa automáticamente.
               </small>
 
               @if (formulario.controls.horaFin.hasError('required') && formulario.controls.horaFin.touched) {
@@ -302,20 +330,25 @@
 
             </div>
 
-            <!-- AVISO DE DURACIÓN MÍNIMA -->
+            <!-- AVISO DE DURACIÓN -->
             <div class="col-12">
 
-              <div class="alert alert-info py-2 mb-0">
-                <i class="bi bi-info-circle me-1"></i>
-                Si vas a reservar un laboratorio, la reserva debe ser por un mínimo de media hora (30 minutos).
+              <div class="reservation-info">
+                <span>ⓘ</span>
+
+                <div>
+                  <strong>Duración mínima: 30 minutos</strong>
+
+                  <p>
+                    Las reservas están permitidas entre las 07:30 y las 22:00.
+                  </p>
+                </div>
               </div>
 
               @if (formulario.hasError('duracionMinima') && formulario.controls.horaFin.touched) {
-
                 <div class="text-danger small mt-2">
-                  La duración de la reserva debe ser como mínimo de 30 minutos.
+                  La reserva debe durar como mínimo 30 minutos.
                 </div>
-
               }
 
             </div>
@@ -323,17 +356,18 @@
             <!-- MOTIVO -->
             <div class="col-12">
 
-              <label class="form-label">
-                Motivo de la reserva
+              <label class="form-label" for="motivo">
+                Motivo de la reserva *
               </label>
 
               <textarea
+                id="motivo"
                 class="form-control"
                 rows="3"
                 maxlength="150"
                 formControlName="motivo"
-                placeholder="Describe el motivo de la reserva">
-              </textarea>
+                placeholder="Ej. Entrenamiento de fútbol, partido amistoso..."
+              ></textarea>
 
               @if (formulario.controls.motivo.hasError('required') && formulario.controls.motivo.touched) {
 
@@ -353,158 +387,310 @@
 
           </div>
 
-          <!-- BOTONES -->
-          <div class="d-flex justify-content-end gap-2 mt-4">
+        </div>
 
-            <button
-              type="button"
-              class="btn btn-outline-secondary"
-              (click)="cerrarFormulario()"
-              [disabled]="guardando">
+        <!-- BOTONES DEL FORMULARIO -->
+        <div class="reservation-form-footer">
 
-              Cancelar
+          <button
+            type="button"
+            class="btn btn-light border"
+            (click)="cerrarFormulario()"
+            [disabled]="guardando"
+          >
+            Cancelar
+          </button>
 
-            </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="guardando"
+          >
+            {{ guardando
+              ? 'Guardando...'
+              : 'Guardar reserva'
+            }}
+          </button>
 
-            <button
-              type="submit"
-              class="btn btn-primary"
-              [disabled]="guardando">
+        </div>
 
-              {{ guardando ? 'Guardando...' : 'Guardar reserva' }}
-
-            </button>
-
-          </div>
-
-        </form>
-
-      </div>
+      </form>
 
     </div>
 
   }
 
-  <!-- LISTA DE RESERVAS -->
-  <div class="card shadow-sm border-0">
+  <!-- LISTADO DE RESERVAS -->
+  <div class="surface-card">
 
-    <div class="card-header bg-white py-3">
+    <div class="reservation-list-header">
 
-      <h5 class="mb-0 fw-bold">
-        Reservas registradas
-      </h5>
+      <div>
+        <h5 class="section-title mb-1">
+          Reservas registradas
+        </h5>
+
+        <p class="small text-secondary mb-0">
+          Consulta y administra las reservas de los clientes.
+        </p>
+      </div>
+
+      <span class="reservation-count">
+        {{ totalReservas }} registros
+      </span>
 
     </div>
 
-    <div class="card-body">
+    @if (cargando) {
 
-      @if (reservas.length > 0) {
+      <div class="loading-state">
+        <div class="spinner-border text-success"></div>
 
-        <div class="table-responsive">
+        <p class="mt-3 mb-0">
+          Cargando reservas...
+        </p>
+      </div>
 
-          <table class="table table-hover align-middle">
+    } @else {
 
-            <thead class="table-light">
+      <!-- FILTRO POR ESTADO -->
+      <div class="reservation-filters mb-3">
+
+        <label for="filtroEstado" class="form-label">
+          Filtrar por estado
+        </label>
+
+        <select
+          id="filtroEstado"
+          class="form-select"
+          style="max-width: 260px"
+          [(ngModel)]="filtroEstado"
+        >
+          <option value="todos">
+            Todos los estados
+          </option>
+
+          <option value="pendiente">
+            Pendientes
+          </option>
+
+          <option value="aprobada">
+            Aprobadas
+          </option>
+
+          <option value="rechazada">
+            Rechazadas
+          </option>
+
+          <option value="cancelada">
+            Canceladas
+          </option>
+        </select>
+
+      </div>
+
+      <div class="table-responsive">
+
+        <table class="table align-middle reservation-table mb-0">
+
+          <thead>
+            <tr>
+              <th>CÓDIGO</th>
+              <th>CANCHA</th>
+              <th>COMPLEJO</th>
+              <th>CLIENTE</th>
+              <th>FECHA</th>
+              <th>HORARIO</th>
+              <th>MOTIVO</th>
+              <th>ESTADO</th>
+              <th class="text-center">ACCIÓN</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (reserva of reservasFiltradas; track reserva.id) {
 
               <tr>
-                <th>Código</th>
-                <th>Laboratorio</th>
-                <th>Estudiante</th>
-                <th>Fecha</th>
-                <th>Horario</th>
-                <th>Motivo</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
 
-            </thead>
-
-            <tbody>
-
-              @for (reserva of reservas; track reserva.id) {
-
-                <tr>
-
-                  <td class="fw-semibold">
+                <td>
+                  <strong class="reservation-code">
                     {{ reserva.codigo }}
-                  </td>
+                  </strong>
+                </td>
 
-                  <td
-                    [appResaltarMantenimiento]="reserva.laboratorioEstado">
+                <td [appResaltarMantenimiento]="reserva.canchaEstado">
 
-                    {{ reserva.laboratorioNombre }}
+                  <strong class="table-primary-text">
+                    {{ reserva.canchaNombre }}
+                  </strong>
 
-                  </td>
+                  @if (reserva.canchaEstado === 'mantenimiento') {
+                    <small class="d-block text-warning">
+                      En mantenimiento
+                    </small>
+                  }
 
-                  <td>
+                </td>
+
+                <td>
+                  <span class="complex-name">
+                    {{ reserva.complejoNombre }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="client-name">
                     {{ reserva.usuarioNombre }}
-                  </td>
+                  </span>
+                </td>
 
-                  <td>
-                    {{ reserva.fecha }}
-                  </td>
+                <td>
+                  {{ reserva.fecha }}
+                </td>
 
-                  <td>
-                    {{ reserva.horaInicio }} - {{ reserva.horaFin }}
-                  </td>
+                <td>
+                  <span class="time-tag">
+                    {{ reserva.horaInicio }} – {{ reserva.horaFin }}
+                  </span>
+                </td>
 
-                  <td>
-                    {{ reserva.motivo }}
-                  </td>
+                <td class="motivo-cell">
+                  {{ reserva.motivo }}
+                </td>
 
-                  <td>
+                <td>
+                  <span
+                    class="reservation-status"
+                    [ngClass]="obtenerClaseEstado(reserva.estado)"
+                  >
+                    {{ reserva.estado | estadoReserva }}
+                  </span>
 
-                    <span
-                      class="badge"
-                      [ngClass]="obtenerClaseEstado(reserva.estado)">
+                  @if (reserva.estado === 'cancelada' && reserva.motivoEstado) {
+                    <small class="d-block cancellation-reason">
+                      {{ reserva.motivoEstado }}
+                    </small>
+                  }
+                </td>
 
-                      {{ reserva.estado | estadoReserva }}
+                <!-- ACCIONES DE ADMINISTRADOR -->
+                <td class="reservation-actions-cell">
 
+                  @if (reserva.estado === 'pendiente') {
+
+                    <div class="reservation-actions">
+
+                      @if (reserva.canchaEstado === 'mantenimiento') {
+                        <span class="action-warning">
+                          <span aria-hidden="true">⚠</span>
+                          Cancha en mantenimiento
+                        </span>
+                      }
+
+                      <div class="reservation-action-buttons">
+
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-success"
+                          (click)="cambiarEstadoReserva(reserva, 'aprobada')"
+                          [disabled]="actualizandoIds.has(reserva.id) || reserva.canchaEstado === 'mantenimiento'"
+                          [title]="reserva.canchaEstado === 'mantenimiento' ? 'No se puede aprobar una reserva de una cancha en mantenimiento' : 'Aprobar reserva'"
+                        >
+                          {{ actualizandoIds.has(reserva.id)
+                            ? 'Actualizando...'
+                            : 'Aprobar'
+                          }}
+                        </button>
+
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-outline-danger"
+                          (click)="cambiarEstadoReserva(reserva, 'rechazada')"
+                          [disabled]="actualizandoIds.has(reserva.id)"
+                        >
+                          {{ actualizandoIds.has(reserva.id)
+                            ? 'Actualizando...'
+                            : 'Rechazar'
+                          }}
+                        </button>
+
+                      </div>
+
+                    </div>
+
+                  } @else if (
+                    reserva.estado === 'cancelada' &&
+                    puedeRestaurarReserva(reserva)
+                  ) {
+
+                    <div class="reservation-actions">
+
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        (click)="restaurarReserva(reserva)"
+                        [disabled]="actualizandoIds.has(reserva.id)"
+                      >
+                        {{ actualizandoIds.has(reserva.id)
+                          ? 'Restaurando...'
+                          : 'Restaurar reserva'
+                        }}
+                      </button>
+
+                    </div>
+
+                  } @else {
+
+                    <span class="text-secondary small action-none">
+                      Sin acciones
                     </span>
 
-                  </td>
+                  }
 
-                  <td>
+                </td>
 
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-outline-danger"
-                      (click)="cancelarReserva(reserva)"
-                      [disabled]="cancelandoId !== null">
+              </tr>
 
-                      {{ cancelandoId === reserva.id ? 'Cancelando...' : 'Cancelar' }}
+            } @empty {
 
-                    </button>
+              <tr>
+                <td colspan="9">
 
-                  </td>
+                  <div class="empty-state">
 
-                </tr>
+                    <div class="empty-state-icon">
+                      📅
+                    </div>
 
-              }
+                    <h6 class="fw-bold">
+                      {{ filtroEstado === 'todos'
+                        ? 'No hay reservas registradas'
+                        : 'No hay reservas con ese estado'
+                      }}
+                    </h6>
 
-            </tbody>
+                    <p class="small mb-0">
+                      {{ filtroEstado === 'todos'
+                        ? 'Las nuevas reservas aparecerán en este listado.'
+                        : 'Prueba seleccionando otro estado.'
+                      }}
+                    </p>
 
-          </table>
+                  </div>
 
-        </div>
+                </td>
+              </tr>
 
-      } @else if (!cargando && !errorCarga) {
+            }
 
-        <div class="text-center py-5">
+          </tbody>
 
-          <h6 class="text-secondary">
-            No hay reservas registradas.
-          </h6>
+        </table>
 
-          <p class="text-secondary mb-0">
-            Cuando se registren reservas, aparecerán en esta lista.
-          </p>
+      </div>
 
-        </div>
-
-      }
-
-    </div>
+    }
 
   </div>
 

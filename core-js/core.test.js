@@ -1,56 +1,65 @@
+
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
     esCorreoUTP,
-    esCodigoAlumno,
+    esCodigoCliente,
     esHora,
     esFecha,
-    esNombreLaboratorio,
-    validarLaboratorio,
+    esNombreCancha,
+    validarCancha,
     validarReserva
 } from './validadores.js';
 
 import {
     Usuario,
-    Laboratorio,
+    Cancha,
     Reserva
 } from './modelos.js';
 
 import {
     reservasPorEstado,
-    ocupacionPorLaboratorio,
-    sedesUnicas,
-    rankingLaboratoriosMasReservados,
+    ocupacionPorCancha,
+    complejosUnicos,
+    rankingCanchasMasReservadas,
     crearGeneradorCodigoReserva
 } from './estadisticas.js';
 
-const lab = {
-    nombre: 'Lab A-301',
-    sede: 'Lima Centro',
+// =====================================================
+// DATOS DE PRUEBA
+// =====================================================
+
+const cancha = {
+    nombre: 'Cancha Futbol 01',
+    complejo: 'Complejo Deportivo Central',
     capacidad: 30,
-    equipos: ['PC i7', 'Proyector'],
+    implementos: ['Balones', 'Conos', 'Redes'],
     estado: 'disponible'
 };
 
 const reserva = {
-    laboratorioId: 1,
+    canchaId: 1,
     usuarioId: 3,
     fecha: '2026-11-20',
     horaInicio: '08:00',
     horaFin: '10:00',
-    motivo: 'Práctica de React',
+    motivo: 'Entrenamiento deportivo',
     estado: 'pendiente'
 };
+
+// =====================================================
+// PRUEBAS DE VALIDADORES
+// =====================================================
 
 test('correo institucional UTP: válido e inválido', () => {
     assert.equal(esCorreoUTP('alumno@utp.edu.pe'), true);
     assert.equal(esCorreoUTP('alumno@gmail.com'), false);
 });
 
-test('código estudiantil: U seguido de ocho dígitos', () => {
-    assert.equal(esCodigoAlumno('U20231234'), true);
-    assert.equal(esCodigoAlumno('A20231234'), false);
+test('código de cliente: U seguido de ocho dígitos', () => {
+    assert.equal(esCodigoCliente('U20231234'), true);
+    assert.equal(esCodigoCliente('A20231234'), false);
 });
 
 test('hora HH:mm respeta límites', () => {
@@ -65,23 +74,23 @@ test('fecha válida incluyendo años bisiestos', () => {
     assert.equal(esFecha('2026-13-01'), false);
 });
 
-test('nombre admite el formato Lab A-301', () => {
-    assert.equal(esNombreLaboratorio('Lab A-301'), true);
-    assert.equal(esNombreLaboratorio('!!'), false);
+test('nombre de cancha admite caracteres válidos', () => {
+    assert.equal(esNombreCancha('Cancha Futbol 01'), true);
+    assert.equal(esNombreCancha('!!'), false);
 });
 
-test('laboratorio válido no produce errores', () => {
-    assert.deepEqual(validarLaboratorio(lab), []);
+test('cancha válida no produce errores', () => {
+    assert.deepEqual(validarCancha(cancha), []);
 });
 
-test('capacidad debe estar entre 1 y 60', () => {
+test('capacidad debe estar entre 1 y 60 jugadores', () => {
     assert.match(
-        validarLaboratorio({ ...lab, capacidad: 61 }).join(' '),
+        validarCancha({ ...cancha, capacidad: 61 }).join(' '),
         /capacidad/
     );
 
     assert.match(
-        validarLaboratorio({ ...lab, capacidad: 0 }).join(' '),
+        validarCancha({ ...cancha, capacidad: 0 }).join(' '),
         /capacidad/
     );
 });
@@ -98,20 +107,25 @@ test('horaFin debe ser posterior a horaInicio', () => {
     );
 });
 
+// =====================================================
+// PRUEBAS DE MODELOS
+// =====================================================
+
 test('Usuario tiene getter de administrador', () => {
     const usuario = new Usuario({
         nombre: 'Ana',
-        codigo: 'A00000001',
+        codigo: 'U00000001',
         rol: 'admin'
     });
 
     assert.equal(usuario.esAdministrador, true);
 });
 
-test('Laboratorio verifica equipos', () => {
-    const laboratorio = new Laboratorio(lab);
+test('Cancha verifica implementos', () => {
+    const nuevaCancha = new Cancha(cancha);
 
-    assert.equal(laboratorio.tieneEquipo('pc i7'), true);
+    assert.equal(nuevaCancha.tieneImplemento('balones'), true);
+    assert.equal(nuevaCancha.tieneImplemento('raquetas'), false);
 });
 
 test('Reserva calcula duración en horas', () => {
@@ -142,12 +156,12 @@ test('reservas contiguas no se cruzan', () => {
     assert.equal(primera.seCruzaCon(segunda), false);
 });
 
-test('reservas de días o laboratorios distintos no se cruzan', () => {
+test('reservas de fechas o canchas distintas no se cruzan', () => {
     const primera = new Reserva(reserva);
 
     assert.equal(
         primera.seCruzaCon(
-            new Reserva({ ...reserva, laboratorioId: 2 })
+            new Reserva({ ...reserva, canchaId: 2 })
         ),
         false
     );
@@ -159,6 +173,10 @@ test('reservas de días o laboratorios distintos no se cruzan', () => {
         false
     );
 });
+
+// =====================================================
+// PRUEBAS DE ESTADÍSTICAS
+// =====================================================
 
 test('reduce: reservas por estado', () => {
     const resultado = reservasPorEstado([
@@ -174,52 +192,61 @@ test('reduce: reservas por estado', () => {
     });
 });
 
-test('Map: ocupación por laboratorio', () => {
-    const mapa = ocupacionPorLaboratorio([
-        { laboratorioId: 1, estado: 'aprobada' },
-        { laboratorioId: 1, estado: 'rechazada' },
-        { laboratorioId: 2, estado: 'aprobada' }
+test('Map: ocupación por cancha', () => {
+    const mapa = ocupacionPorCancha([
+        { canchaId: 1, estado: 'aprobada' },
+        { canchaId: 1, estado: 'rechazada' },
+        { canchaId: 2, estado: 'aprobada' }
     ]);
 
     assert.equal(mapa.get('1'), 1);
     assert.equal(mapa.get('2'), 1);
 });
 
-test('Set: sedes sin duplicados', () => {
-    const resultado = sedesUnicas([
-        { sede: 'Lima Sur' },
-        { sede: 'Lima Centro' },
-        { sede: 'Lima Sur' }
+test('Set: complejos deportivos sin duplicados', () => {
+    const resultado = complejosUnicos([
+        { complejo: 'Complejo Norte' },
+        { complejo: 'Complejo Sur' },
+        { complejo: 'Complejo Norte' }
     ]);
 
     assert.deepEqual(resultado, [
-        'Lima Centro',
-        'Lima Sur'
+        'Complejo Norte',
+        'Complejo Sur'
     ]);
 });
 
 test('spread y sort: ranking sin modificar el original', () => {
-    const laboratorios = [
-        { id: 1, nombre: 'Lab A' },
-        { id: 2, nombre: 'Lab B' }
+    const canchas = [
+        { id: 1, nombre: 'Cancha A' },
+        { id: 2, nombre: 'Cancha B' }
     ];
 
-    const ranking = rankingLaboratoriosMasReservados(
-        laboratorios,
+    const ranking = rankingCanchasMasReservadas(
+        canchas,
         [
-            { laboratorioId: 2 },
-            { laboratorioId: 2 },
-            { laboratorioId: 1 }
+            { canchaId: 2 },
+            { canchaId: 2 },
+            { canchaId: 1 }
         ]
     );
 
     assert.equal(ranking[0].id, 2);
-    assert.equal(laboratorios[0].id, 1);
+    assert.equal(ranking[0].totalReservas, 2);
+    assert.equal(canchas[0].totalReservas, undefined);
 });
 
-test('closure y padStart generan códigos consecutivos', () => {
-    const siguiente = crearGeneradorCodigoReserva();
+test('closure: genera códigos consecutivos', () => {
+    const generar = crearGeneradorCodigoReserva();
 
-    assert.equal(siguiente(), 'RES-0001');
-    assert.equal(siguiente(), 'RES-0002');
+    assert.equal(generar(), 'RES-0001');
+    assert.equal(generar(), 'RES-0002');
+    assert.equal(generar(), 'RES-0003');
+});
+
+test('generador rechaza un inicio inválido', () => {
+    assert.throws(
+        () => crearGeneradorCodigoReserva(0),
+        RangeError
+    );
 });

@@ -1,4 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {
+  Pipe,
+  PipeTransform
+} from '@angular/core';
 
 @Pipe({
   name: 'estadoReserva',
@@ -6,22 +9,29 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class EstadoReservaPipe implements PipeTransform {
 
-  transform(estado: string | null | undefined): string {
+  transform(
+    estado: string | null | undefined
+  ): string {
 
     switch (estado?.toLowerCase()) {
 
       case 'pendiente':
-        return '🟡 Pendiente';
+        return 'Pendiente';
 
       case 'aprobada':
-        return '🟢 Aprobada';
+        return 'Aprobada';
 
       case 'rechazada':
-        return '🔴 Rechazada';
+        return 'Rechazada';
+
+      case 'cancelada':
+        return 'Cancelada';
 
       default:
-        return '⚪ Desconocido';
+        return 'Desconocido';
 
     }
+
   }
+
 }
