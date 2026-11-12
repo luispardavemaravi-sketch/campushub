@@ -53,7 +53,7 @@ export default function FormularioReserva({ onCreada }) {
               name="horaInicio"
               type="time"
               min="07:30"
-              max="21:59"
+              max="21:30"
               className="form-control"
               value={formulario.horaInicio}
               onChange={cambiar}

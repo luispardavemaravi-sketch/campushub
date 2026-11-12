@@ -37,6 +37,15 @@ function horaLocal() {
   ].join(':');
 }
 
+function sumarTreintaMinutos(hora) {
+  if (!esHora(hora)) return '';
+
+  const [horas, minutos] = hora.split(':').map(Number);
+  const total = horas * 60 + minutos + 30;
+
+  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+}
+
 export default function useFormularioReserva(onCreada) {
 
   const [formulario, setFormulario] = useState(inicial);
@@ -55,10 +64,15 @@ export default function useFormularioReserva(onCreada) {
   function cambiar(evento) {
     const { name, value } = evento.target;
 
-    setFormulario(actual => ({
-      ...actual,
-      [name]: value
-    }));
+    setFormulario(actual => {
+      const actualizado = { ...actual, [name]: value };
+
+      if (name === 'horaInicio') {
+        actualizado.horaFin = sumarTreintaMinutos(value);
+      }
+
+      return actualizado;
+    });
 
     setErrores(actual => ({
       ...actual,
@@ -104,9 +118,9 @@ export default function useFormularioReserva(onCreada) {
 
     if (esHora(datos.horaInicio) && esHora(datos.horaFin)) {
 
-      if (datos.horaInicio < '07:30' || datos.horaInicio >= '22:00') {
+      if (datos.horaInicio < '07:30' || datos.horaInicio > '21:30') {
         nuevosErrores.horaInicio =
-          'El horario permitido comienza a las 7:30 a. m. y termina antes de las 10:00 p. m.';
+          'El horario de inicio debe estar entre las 7:30 a. m. y las 9:30 p. m. para completar la reserva.';
       }
 
       if (datos.horaFin > '22:00') {
@@ -114,9 +128,12 @@ export default function useFormularioReserva(onCreada) {
           'La hora de finalización no puede superar las 10:00 p. m.';
       }
 
-      if (datos.horaFin <= datos.horaInicio) {
+      const minutosInicio = Number(datos.horaInicio.slice(0, 2)) * 60 + Number(datos.horaInicio.slice(3, 5));
+      const minutosFin = Number(datos.horaFin.slice(0, 2)) * 60 + Number(datos.horaFin.slice(3, 5));
+
+      if (minutosFin - minutosInicio < 30) {
         nuevosErrores.horaFin =
-          'La hora final debe ser posterior a la inicial.';
+          'La reserva debe durar al menos 30 minutos.';
       }
 
       if (
