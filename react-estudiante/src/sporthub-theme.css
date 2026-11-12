@@ -1,0 +1,306 @@
+/* =====================================================
+   SPORTHUB - IDENTIDAD VISUAL DEL PORTAL DEL CLIENTE
+   ===================================================== */
+
+:root {
+  --navy: #124b46;
+  --navy-2: #17645c;
+  --blue: #168477;
+  --accent: #4bc4a9;
+
+  --page: #f3f8f7;
+  --surface: #ffffff;
+  --soft: #e8f4f1;
+  --ink: #233b38;
+  --muted: #718681;
+  --line: #dceae6;
+}
+
+/* Fondo general */
+
+body {
+  background: var(--page);
+  color: var(--ink);
+}
+
+/* Barra superior y marca */
+
+.topbar {
+  background: linear-gradient(110deg, #103d39, #17645c);
+  box-shadow: 0 8px 24px #103d3920;
+}
+
+.brand-symbol {
+  background: #ffffff;
+  color: #17645c;
+}
+
+.brand-mark > span:last-child > span {
+  color: #78ddc1;
+}
+
+.nav-link.active,
+.nav-link:hover {
+  color: #ffffff !important;
+}
+
+/* Botones */
+
+.btn-primary,
+.btn-nav-primary {
+  background: #168477;
+  border-color: #168477;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: #10685e;
+  border-color: #10685e;
+  color: #ffffff;
+}
+
+.btn-outline-primary {
+  color: #168477;
+  border-color: #168477;
+}
+
+.btn-outline-primary:hover {
+  background: #168477;
+  border-color: #168477;
+  color: #ffffff;
+}
+
+/* Portada principal */
+
+.hero-panel {
+  background: linear-gradient(
+    112deg,
+    #103d39 0%,
+    #17645c 62%,
+    #269b84 100%
+  );
+}
+
+.hero-panel h1 span {
+  color: #83e0c6;
+}
+
+.hero-tag {
+  color: #d2fff0;
+}
+
+/* Tarjetas */
+
+.metric-card,
+.feature-card,
+.filter-panel,
+.form-panel,
+.login-form-wrap,
+.detail-content,
+.reservation-card,
+.info-panel {
+  border-color: var(--line);
+}
+
+.metric-card > span,
+.feature-icon {
+  color: #168477;
+}
+
+.feature-card a,
+.text-link,
+.back-link {
+  color: #168477;
+}
+
+.feature-card a:hover,
+.text-link:hover {
+  color: #105f56;
+}
+
+/* Estados */
+
+.status-available,
+.status-approved {
+  background: #e0f5eb;
+  color: #17794e;
+}
+
+.status-pending {
+  background: #fff3d9;
+  color: #986800;
+}
+
+.status-maintenance,
+.status-rejected,
+.status-cancelled {
+  background: #fde8e8;
+  color: #b13f3f;
+}
+
+/* Resumen de próxima reserva */
+
+.next-reservation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+
+  background: #ffffff;
+  border: 1px solid #dceae6;
+  border-radius: 18px;
+
+  padding: 22px 26px;
+  margin-bottom: 32px;
+
+  box-shadow: 0 5px 20px #124b4608;
+}
+
+.next-reservation h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 8px 0;
+}
+
+.next-reservation p {
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.next-countdown {
+  background: #eaf6f2;
+  border-radius: 12px;
+  padding: 15px 20px;
+  text-align: center;
+}
+
+.countdown-values {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 10px 0;
+  color: #17645c;
+}
+
+.countdown-values strong {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.next-countdown small {
+  color: #718681;
+}
+
+.next-detail-link {
+  grid-column: 1 / -1;
+  justify-self: end;
+  color: #168477;
+  font-weight: 700;
+}
+
+.empty-next {
+  grid-template-columns: 1fr auto;
+}
+
+/* Login */
+
+.login-aside {
+  background: linear-gradient(
+    145deg,
+    #103d39,
+    #208b78
+  );
+}
+
+.login-aside .eyebrow {
+  color: #9ce7d2;
+}
+
+.login-decoration {
+  color: #ffffff;
+}
+
+/* Pie de página */
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  background: #ffffff;
+  color: #718681;
+}
+
+/* Página 404 */
+
+.not-found {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.not-found-code {
+  font-size: clamp(5rem, 15vw, 9rem);
+  line-height: 1;
+  font-weight: 800;
+  color: #168477;
+}
+
+.not-found p {
+  color: var(--muted);
+  max-width: 480px;
+}
+
+/* Tema oscuro */
+
+:root[data-theme='oscuro'] {
+  --page: #101f1d;
+  --surface: #1a302c;
+  --soft: #25443e;
+  --ink: #e8f5f0;
+  --muted: #a5bbb3;
+  --line: #34544b;
+}
+
+:root[data-theme='oscuro'] .next-reservation,
+:root[data-theme='oscuro'] .site-footer {
+  background: #1a302c;
+  border-color: #34544b;
+}
+
+:root[data-theme='oscuro'] .next-countdown {
+  background: #25443e;
+}
+
+:root[data-theme='oscuro'] .next-countdown .countdown-values {
+  color: #83e0c6;
+}
+
+/* Adaptación para celulares */
+
+@media (max-width: 768px) {
+  .next-reservation,
+  .empty-next {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .next-countdown {
+    text-align: left;
+  }
+
+  .countdown-values {
+    justify-content: flex-start;
+  }
+
+  .next-detail-link {
+    justify-self: start;
+  }
+
+  .hero-panel {
+    min-height: 320px;
+  }
+}
