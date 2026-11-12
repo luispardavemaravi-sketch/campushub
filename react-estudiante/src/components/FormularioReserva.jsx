@@ -1,6 +1,14 @@
+//Permite que el cliente registre una solicitud de reserva.
+
+//Este componente utiliza otro componente llamado CampoReserva.jsx, que 
+//sirve para reutilizar la estructura de los campos y mostrar sus errores.
 import CampoReserva from './CampoReserva.jsx';
+
+//También utiliza el hook personalizado useFormularioReserva.js, 
+//donde se encuentra gran parte de la lógica de validación y registro
 import useFormularioReserva from '../hooks/useFormularioReserva.js';
 
+// Recibe la prop onCreada desde NuevaReservaPage.jsx.
 export default function FormularioReserva({ onCreada }) {
 
   const {

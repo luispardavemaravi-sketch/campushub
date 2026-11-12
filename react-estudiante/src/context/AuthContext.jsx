@@ -78,6 +78,8 @@ export function AuthProvider({ children }) {
 }
 
 export function useAuth() {
+
+  //Guarda la información del usuario que inició sesión.
   const contexto = useContext(AuthContext);
 
   if (!contexto) {

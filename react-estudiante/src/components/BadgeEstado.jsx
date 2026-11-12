@@ -1,3 +1,5 @@
+//Sirve para mostrar visualmente el estado de una cancha o reserva.
+
 const estilos = {
   disponible: 'status-available',
   mantenimiento: 'status-maintenance',
@@ -16,7 +18,10 @@ const etiquetas = {
   cancelada: 'Cancelada'
 };
 
+// Recibe la prop estado desde TarjetaCancha.jsx
+// o MisReservasPage.jsx.
 export default function BadgeEstado({ estado }) {
+
   const clase = estilos[estado] || 'status-neutral';
   const texto = etiquetas[estado] || estado || 'Sin estado';
 

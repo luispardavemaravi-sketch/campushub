@@ -26,6 +26,8 @@ export function ThemeProvider({ children }) {
 }
 
 export function useTheme() {
+
+  //Guarda el tema seleccionado por el usuario: claro u oscuro.
   const contexto = useContext(ThemeContext);
 
   if (!contexto) {

@@ -1,8 +1,9 @@
+//utilizamos React Router DOM para la navegación
 import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes
+  BrowserRouter, //Activa el sistema de navegación
+  Navigate,      //	Agrupa todas las rutas
+  Route,         //Define una ruta y la página que muestra
+  Routes         //	Redirige a otra página
 } from 'react-router-dom';
 
 import { AuthProvider } from './context/AuthContext.jsx';

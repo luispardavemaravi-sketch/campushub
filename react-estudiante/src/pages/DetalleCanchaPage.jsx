@@ -5,7 +5,7 @@ import { useData } from '../context/DataContext.jsx';
 import BadgeEstado from '../components/BadgeEstado.jsx';
 
 export default function DetalleCanchaPage() {
-  const { id } = useParams();
+  const { id } = useParams();  //useParams() sirve para leer los parámetros dinámicos de la URL
   const { canchas } = useData();
 
   const cancha = canchas.find(

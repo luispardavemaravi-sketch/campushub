@@ -20,6 +20,8 @@ export default function useCountdown(destino) {
     () => (destino ? calcularTiempo(destino) : null)
   );
 
+  //---useEffect – Ejecutar acciones cuando algo cambia
+  //Este Hook calcula cuánto tiempo falta para que comience la próxima reserva.
   useEffect(() => {
     if (!destino) {
       setTiempo(null);

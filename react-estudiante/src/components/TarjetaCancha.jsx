@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import BadgeEstado from './BadgeEstado.jsx';
 
+// Recibe la prop cancha desde ListaCanchas.jsx.
+// Contiene la información de una cancha específica,
+// como su nombre, complejo, capacidad y estado.
 export default function TarjetaCancha({ cancha }) {
   return (
     <article className="court-card h-100">
@@ -15,6 +18,7 @@ export default function TarjetaCancha({ cancha }) {
       <div className="p-4">
         <div className="d-flex justify-content-between align-items-start gap-2 mb-2">
           <span className="eyebrow">{cancha.complejo}</span>
+
           <BadgeEstado estado={cancha.estado} />
         </div>
 

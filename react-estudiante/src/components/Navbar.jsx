@@ -2,8 +2,15 @@ import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useTheme } from '../context/ThemeContext.jsx';
 
+// Recibe la prop nombreMarca desde App.jsx.
+// Esta prop contiene el nombre de la marca que se mostrará en la barra de navegación.
 export default function Navbar({ nombreMarca = 'SportHub' }) {
+
+  //Significa que el componente obtiene los datos del usuario y sabe si inició sesión.
+  //Recibe información de AuthContext para saber si existe un usuario conectado
   const { usuario, autenticado, cerrarSesion } = useAuth();
+
+  //Recibe información de ThemeContext para saber qué tema está seleccionado
   const { tema, alternarTema } = useTheme();
 
   const navegar = useNavigate();

@@ -43,6 +43,10 @@ export default function useFormularioReserva(onCreada) {
   const [errores, setErrores] = useState({});
   const [mensaje, setMensaje] = useState('');
 
+  //---useRef – Acceder directamente a un elemento
+  //Cuando se abre el formulario, automáticamente se coloca el 
+  // cursor en el primer campo, que en tu caso es la selección de cancha.
+//También se vuelve a enfocar después de guardar una reserva:
   const campoInicial = useRef(null);
 
   const { usuario } = useAuth();

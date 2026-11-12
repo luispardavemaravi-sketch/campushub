@@ -9,6 +9,9 @@ export default function CatalogoPage() {
 
   const { canchas } = useData();
 
+  //----useState – Guardar y actualizar información
+  //texto: guarda lo que el usuario escribe en el buscador.
+  //complejo: guarda el complejo deportivo seleccionado.
   const [texto, setTexto] = useState('');
   const [complejo, setComplejo] = useState('todos');
 

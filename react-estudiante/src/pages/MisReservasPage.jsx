@@ -15,8 +15,11 @@ export default function MisReservasPage() {
   const { usuario } = useAuth();
   const { reservas, canchas } = useData();
 
+  //---useState – Guardar y actualizar información
+  //Aquí se guarda la lista de reservas del usuario.
   const [misReservas, setMisReservas] = useState([]);
 
+  //---useEffect – Ejecutar acciones cuando algo cambia
   useEffect(() => {
 
     const resultado = reservas

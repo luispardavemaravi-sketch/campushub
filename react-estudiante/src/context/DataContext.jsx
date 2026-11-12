@@ -110,6 +110,8 @@ export function DataProvider({ children }) {
 }
 
 export function useData() {
+  //Comparte los datos de las canchas, usuarios y reservas, 
+  // además de la función para crear reservas.
   const contexto = useContext(DataContext);
 
   if (!contexto) {
