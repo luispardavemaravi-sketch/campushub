@@ -46,7 +46,12 @@ export class ReservaService {
     );
   }
 
-  cancelar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+  cancelar(id: number): Observable<Reserva> {
+    return this.http.patch<Reserva>(`${this.url}/${id}`, {
+      estado: 'cancelada',
+      motivoEstado: 'Cancelada por el administrador.',
+      canceladaEn: new Date().toISOString(),
+      canceladaPor: 'Administrador'
+    });
   }
 }

@@ -4,6 +4,7 @@
 
 Aplicación web para administrar canchas deportivas y sus reservas. El proyecto aplica JavaScript moderno, programación orientada a objetos, validaciones, Angular y una API REST simulada con JSON Server.
 
+**Dominio:** SportHub (aprobado por el docente)
 **Universidad:** Universidad Tecnológica del Perú (UTP)  
 **Curso:** JavaScript Avanzado  
 **Avance:** 1
@@ -65,7 +66,7 @@ campushub/
 - Validar fechas, horas y duración.
 - Evitar cruces de horario para la misma cancha y fecha.
 - Aprobar o rechazar reservas desde el panel.
-- Cancelar una reserva con `DELETE /reservas/:id`.
+- Cancelar una reserva mediante `PATCH`, conservando el registro y su historial.
 - Mostrar el estado con el pipe `estadoReserva`.
 
 ### JavaScript avanzado
@@ -123,11 +124,10 @@ Angular queda disponible en `http://localhost:4200` (o en el puerto alternativo 
 | GET | `/reservas` | Listar reservas |
 | GET | `/reservas?usuarioId=5` | Filtrar reservas por usuario |
 | POST | `/reservas` | Registrar reserva |
-| PATCH | `/reservas/:id` | Actualizar estado en el panel |
-| DELETE | `/reservas/:id` | Cancelar reserva |
+| PATCH | `/reservas/:id` | Aprobar, rechazar o cancelar sin borrar el registro |
 | GET | `/usuarios?correo=` | Buscar usuario para el login simulado |
 
-La base de datos de demostración incluye 10 usuarios, 11 canchas y 28 reservas. Incluye registros pendientes, aprobados y rechazados para las pruebas del avance.
+La base de datos de demostración incluye 10 usuarios, 11 canchas y 30 reservas con IDs y códigos consecutivos desde `RES-0001` hasta `RES-0030`. Incluye registros pendientes, aprobados, rechazados y cancelados.
 
 La colección Postman está en `api-mock/postman/sporthub-avance-1.postman_collection.json`.
 
@@ -158,7 +158,7 @@ npm run sync-core
 npm run build
 ```
 
-La colección Postman permite probar los métodos HTTP del API. Para las solicitudes de creación, usa registros de demostración y elimina los datos temporales al terminar.
+La colección Postman permite probar los métodos HTTP del API. Su solicitud `Cancelar` usa `PATCH` para conservar el registro y marcar quién lo canceló.
 
 ## 10. Uso de herramientas de IA
 

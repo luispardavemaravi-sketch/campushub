@@ -608,12 +608,18 @@ export class ReservaList implements OnInit {
     this.mensaje = '';
 
     this.reservaService.cancelar(reserva.id).subscribe({
-      next: () => {
-        this.reservas = this.reservas.filter(
-          item => item.id !== reserva.id
+      next: reservaCancelada => {
+        this.reservas = this.reservas.map(item =>
+          item.id === reserva.id
+            ? this.convertirVista({
+                ...item,
+                ...reservaCancelada
+              })
+            : item
         );
         this.actualizandoIds.delete(reserva.id);
-        this.mensaje = `La reserva ${reserva.codigo} fue cancelada.`;
+        this.mensaje =
+          `La reserva ${reserva.codigo} fue cancelada por el administrador.`;
         this.cdr.detectChanges();
       },
       error: error => {

@@ -106,7 +106,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"codigo\": \"RES-0029\",\n  \"canchaId\": 1,\n  \"usuarioId\": 5,\n  \"fecha\": \"2026-12-15\",\n  \"horaInicio\": \"08:00\",\n  \"horaFin\": \"09:00\",\n  \"motivo\": \"Prueba de API SportHub\",\n  \"estado\": \"pendiente\",\n  \"creadoEn\": \"2026-11-12T12:00:00.000Z\"\n}"
+              "raw": "{\n  \"codigo\": \"RES-0031\",\n  \"canchaId\": 1,\n  \"usuarioId\": 5,\n  \"fecha\": \"2026-12-15\",\n  \"horaInicio\": \"08:00\",\n  \"horaFin\": \"09:00\",\n  \"motivo\": \"Prueba de API SportHub\",\n  \"estado\": \"pendiente\",\n  \"creadoEn\": \"2026-11-12T12:00:00.000Z\"\n}"
             },
             "url": "{{baseUrl}}/reservas"
           }
@@ -114,7 +114,17 @@
         {
           "name": "Cancelar",
           "request": {
-            "method": "DELETE",
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"cancelada\",\n  \"motivoEstado\": \"Cancelada por el administrador.\",\n  \"canceladaEn\": \"2026-11-12T19:00:00.000Z\",\n  \"canceladaPor\": \"Administrador\"\n}"
+            },
             "url": "{{baseUrl}}/reservas/{{reservaId}}"
           }
         }

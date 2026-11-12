@@ -144,7 +144,6 @@
       "estado": "disponible"
     },
     {
-      "id": 6,
       "nombre": "Cancha de Futsal 01",
       "complejo": "Complejo Deportivo Sur",
       "capacidad": 12,
@@ -153,7 +152,8 @@
         "Arcos",
         "Redes"
       ],
-      "estado": "disponible"
+      "estado": "disponible",
+      "id": 6
     },
     {
       "id": 7,
@@ -252,12 +252,12 @@
       "horaInicio": "09:00",
       "horaFin": "11:00",
       "motivo": "Práctica deportiva",
-      "estado": "aprobada",
+      "estado": "cancelada",
       "creadoEn": "2026-11-10T11:00:00Z",
-      "motivoEstado": "Cancelada por mantenimiento de la cancha \"Cancha de Fútbol 02\".",
-      "canceladaEn": "2026-11-11T17:21:27.868Z",
+      "motivoEstado": "Cancelada por el administrador.",
+      "canceladaEn": "2026-11-12T19:13:35.488Z",
       "canceladaPor": "Administrador",
-      "restauradaEn": "2026-11-11T17:22:53.492Z",
+      "restauradaEn": "2026-11-12T19:13:28.104Z",
       "restauradaPor": "Administrador",
       "motivoRestauracion": "Reserva restaurada por el administrador después de verificar la disponibilidad de la cancha."
     },
@@ -330,10 +330,10 @@
       "horaInicio": "10:00",
       "horaFin": "12:00",
       "motivo": "Partido de fútbol",
-      "estado": "aprobada",
+      "estado": "cancelada",
       "creadoEn": "2026-11-10T14:00:00Z",
       "motivoEstado": "Cancelada por mantenimiento de la cancha \"Cancha de Fútbol 02\".",
-      "canceladaEn": "2026-11-11T17:21:27.868Z",
+      "canceladaEn": "2026-11-12T19:03:11.026Z",
       "canceladaPor": "Administrador",
       "restauradaEn": "2026-11-11T17:22:49.669Z",
       "restauradaPor": "Administrador",
@@ -445,7 +445,13 @@
       "horaFin": "12:00",
       "motivo": "Entrenamiento de futsal",
       "estado": "aprobada",
-      "creadoEn": "2026-11-10T18:30:00Z"
+      "creadoEn": "2026-11-10T18:30:00Z",
+      "motivoEstado": "Cancelada por el administrador.",
+      "canceladaEn": "2026-11-12T19:02:23.898Z",
+      "canceladaPor": "Administrador",
+      "restauradaEn": "2026-11-12T19:02:38.484Z",
+      "restauradaPor": "Administrador",
+      "motivoRestauracion": "Reserva restaurada por el administrador después de verificar la disponibilidad de la cancha."
     },
     {
       "id": 19,
@@ -581,6 +587,30 @@
       "motivoEstado": "Cancelada por cierre temporal del complejo deportivo.",
       "canceladaEn": "2026-10-18T09:30:00.000Z",
       "canceladaPor": "Administrador"
+    },
+    {
+      "codigo": "RES-0029",
+      "canchaId": 1,
+      "usuarioId": 5,
+      "fecha": "2026-12-15",
+      "horaInicio": "08:00",
+      "horaFin": "09:00",
+      "motivo": "Prueba de API SportHub",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-12T12:00:00.000Z",
+      "id": 29
+    },
+    {
+      "canchaId": 11,
+      "usuarioId": 6,
+      "fecha": "2026-11-12",
+      "horaInicio": "15:47",
+      "horaFin": "16:17",
+      "motivo": "jugar",
+      "estado": "rechazada",
+      "codigo": "RES-0030",
+      "creadoEn": "2026-11-12T18:47:43.780Z",
+      "id": 30
     }
   ]
 }
