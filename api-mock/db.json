@@ -216,6 +216,16 @@
       ],
       "estado": "disponible",
       "id": 11
+    },
+    {
+      "nombre": "cancha prueba de luisangel",
+      "complejo": "bombonera",
+      "capacidad": 22,
+      "implementos": [
+        "pelota de futbol"
+      ],
+      "estado": "disponible",
+      "id": 12
     }
   ],
   "reservas": [
