@@ -1,13 +1,13 @@
-
 export type EstadoReserva =
   | 'pendiente'
   | 'aprobada'
-  | 'rechazada';
+  | 'rechazada'
+  | 'cancelada';
 
 export interface Reserva {
   id: number;
   codigo: string;
-  laboratorioId: number;
+  canchaId: number;
   usuarioId: number;
   fecha: string;
   horaInicio: string;
@@ -15,6 +15,15 @@ export interface Reserva {
   motivo: string;
   estado: EstadoReserva;
   creadoEn: string;
+
+  motivoEstado?: string;
+  canceladaEn?: string;
+  canceladaPor?: string;
+
+  // Datos de auditoría si se restaura una reserva.
+  restauradaEn?: string;
+  restauradaPor?: string;
+  motivoRestauracion?: string;
 }
 
 export type ReservaPayload = Omit<Reserva, 'id'>;

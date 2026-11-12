@@ -1,0 +1,159 @@
+
+<section class="detail-page">
+
+  @if (cargando) {
+
+    <div class="surface-card detail-loading">
+      <div class="spinner-border text-success"></div>
+      <p class="mt-3 mb-0">Cargando información...</p>
+    </div>
+
+  } @else if (cancha) {
+
+    <div class="page-heading">
+
+      <div class="page-eyebrow">
+        Administración deportiva
+      </div>
+
+      <h1>Detalle de cancha</h1>
+
+      <p class="page-description">
+        Consulta toda la información de esta cancha deportiva.
+      </p>
+
+    </div>
+
+    <div class="surface-card detail-card">
+
+      <div class="detail-banner">
+
+        <div class="detail-sport-icon">⚽</div>
+
+        <div class="detail-title">
+
+          <span class="detail-subtitle">
+            CANCHA DEPORTIVA #{{ cancha.id }}
+          </span>
+
+          <h2>{{ cancha.nombre }}</h2>
+
+          <span
+            class="detail-status"
+            [class.available]="cancha.estado === 'disponible'"
+            [class.maintenance]="cancha.estado === 'mantenimiento'">
+
+            ●
+            {{ cancha.estado === 'disponible'
+              ? 'Disponible'
+              : 'En mantenimiento'
+            }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="detail-content">
+
+        <h5 class="section-title mb-4">
+          Información general
+        </h5>
+
+        <div class="row g-4">
+
+          <div class="col-12 col-md-6">
+
+            <div class="detail-field">
+              <span class="detail-field-icon">🏟️</span>
+
+              <div>
+                <small>Complejo deportivo</small>
+                <strong>{{ cancha.complejo }}</strong>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-12 col-md-6">
+
+            <div class="detail-field">
+              <span class="detail-field-icon">👥</span>
+
+              <div>
+                <small>Capacidad de jugadores</small>
+                <strong>{{ cancha.capacidad }} jugadores</strong>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-12">
+
+            <div class="detail-field">
+              <span class="detail-field-icon">🎾</span>
+
+              <div class="flex-grow-1">
+
+                <small>Implementos deportivos</small>
+
+                <div class="detail-equipment">
+
+                  @for (implemento of cancha.implementos; track implemento) {
+                    <span>{{ implemento }}</span>
+                  } @empty {
+                    <span class="text-secondary">
+                      No se registraron implementos.
+                    </span>
+                  }
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="detail-actions">
+
+        <a routerLink="/canchas" class="btn btn-light border">
+          Volver al listado
+        </a>
+
+        <a
+          [routerLink]="['/canchas', cancha.id, 'editar']"
+          class="btn btn-primary">
+          Editar cancha
+        </a>
+
+      </div>
+
+    </div>
+
+  } @else {
+
+    <div class="surface-card empty-state">
+
+      <div class="empty-state-icon">🏟️</div>
+
+      <h5>Cancha no encontrada</h5>
+
+      <p>
+        No existe una cancha registrada con el identificador solicitado.
+      </p>
+
+      <a routerLink="/canchas" class="btn btn-primary">
+        Volver al listado
+      </a>
+
+    </div>
+
+  }
+
+</section>

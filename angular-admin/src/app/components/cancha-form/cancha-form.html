@@ -1,0 +1,265 @@
+
+<section class="form-page">
+
+  <!-- ENCABEZADO -->
+  <div class="page-heading">
+
+    <div class="page-eyebrow">
+      Administración deportiva
+    </div>
+
+    <h1>
+      {{ id ? 'Editar cancha' : 'Registrar nueva cancha' }}
+    </h1>
+
+    <p class="page-description">
+      {{ id
+        ? 'Actualiza la información de la cancha deportiva.'
+        : 'Completa los datos para agregar una cancha al complejo deportivo.'
+      }}
+    </p>
+
+  </div>
+
+  @if (cargando()) {
+
+    <div class="surface-card loading-form">
+      <div class="spinner-border text-success"></div>
+      <p class="mt-3 mb-0">Cargando información de la cancha...</p>
+    </div>
+
+  } @else {
+
+    @if (errorApi()) {
+      <div class="alert alert-danger border-0 rounded-3">
+        {{ errorApi() }}
+      </div>
+    }
+
+    @if (erroresCore().length > 0) {
+
+      <div class="alert alert-warning border-0 rounded-3">
+
+        <strong>Revisa los siguientes datos:</strong>
+
+        <ul class="mb-0 mt-2">
+          @for (error of erroresCore(); track error) {
+            <li>{{ error }}</li>
+          }
+        </ul>
+
+      </div>
+
+    }
+
+    <div class="surface-card form-card">
+
+      <div class="form-card-header">
+
+        <div class="form-heading-icon">🏟️</div>
+
+        <div>
+          <h5 class="mb-1">Información de la cancha</h5>
+          <p class="small text-secondary mb-0">
+            Los campos marcados son obligatorios.
+          </p>
+        </div>
+
+      </div>
+
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="guardar()"
+        novalidate>
+
+        <div class="form-card-body">
+
+          <div class="row g-4">
+
+            <!-- NOMBRE -->
+            <div class="col-12">
+
+              <label class="form-label" for="nombre">
+                Nombre de la cancha *
+              </label>
+
+              <input
+                id="nombre"
+                type="text"
+                class="form-control"
+                formControlName="nombre"
+                placeholder="Ej. Cancha de Fútbol 03"
+                [ngClass]="{
+                  'is-invalid': invalido('nombre')
+                }">
+
+              @if (invalido('nombre')) {
+
+                @if (formulario.controls.nombre.hasError('required')) {
+
+                  <div class="invalid-feedback">
+                    El nombre de la cancha es obligatorio.
+                  </div>
+
+                } @else {
+
+                  <div class="invalid-feedback">
+                    Utiliza entre 3 y 60 caracteres válidos.
+                  </div>
+
+                }
+
+              }
+
+            </div>
+
+            <!-- COMPLEJO -->
+            <div class="col-12 col-md-7">
+
+              <label class="form-label" for="complejo">
+                Complejo deportivo *
+              </label>
+
+              <input
+                id="complejo"
+                type="text"
+                class="form-control"
+                formControlName="complejo"
+                placeholder="Ej. Complejo Deportivo Central"
+                [ngClass]="{
+                  'is-invalid': invalido('complejo')
+                }">
+
+              @if (invalido('complejo')) {
+
+                <div class="invalid-feedback">
+                  Ingresa un complejo deportivo válido.
+                </div>
+
+              }
+
+            </div>
+
+            <!-- CAPACIDAD -->
+            <div class="col-12 col-md-5">
+
+              <label class="form-label" for="capacidad">
+                Capacidad de jugadores *
+              </label>
+
+              <input
+                id="capacidad"
+                type="number"
+                min="1"
+                max="60"
+                class="form-control"
+                formControlName="capacidad"
+                [ngClass]="{
+                  'is-invalid': invalido('capacidad')
+                }">
+
+              @if (invalido('capacidad')) {
+
+                <div class="invalid-feedback">
+                  La capacidad debe estar entre 1 y 60 jugadores.
+                </div>
+
+              }
+
+            </div>
+
+            <!-- IMPLEMENTOS -->
+            <div class="col-12">
+
+              <label class="form-label" for="implementos">
+                Implementos deportivos
+              </label>
+
+              <input
+                id="implementos"
+                type="text"
+                class="form-control"
+                formControlName="implementos"
+                placeholder="Balones, Redes, Conos, Arcos"
+                [ngClass]="{
+                  'is-invalid': invalido('implementos')
+                }">
+
+              <div class="form-text">
+                Separa los implementos utilizando comas. Este campo es opcional.
+              </div>
+
+              @if (invalido('implementos')) {
+
+                <div class="invalid-feedback">
+                  Separa correctamente los implementos con comas.
+                </div>
+
+              }
+
+            </div>
+
+            <!-- ESTADO -->
+            <div class="col-12">
+
+              <label class="form-label" for="estado">
+                Estado de la cancha *
+              </label>
+
+              <select
+                id="estado"
+                class="form-select"
+                formControlName="estado">
+
+                <option value="disponible">
+                  Disponible
+                </option>
+
+                <option value="mantenimiento">
+                  En mantenimiento
+                </option>
+
+              </select>
+
+              <div class="form-text">
+                Las canchas en mantenimiento no podrán recibir nuevas reservas.
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- BOTONES -->
+        <div class="form-card-footer">
+
+          <a
+            routerLink="/canchas"
+            class="btn btn-light border">
+            Cancelar
+          </a>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="guardando()">
+
+            {{ guardando()
+              ? 'Guardando...'
+              : id
+                ? 'Guardar cambios'
+                : 'Registrar cancha'
+            }}
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  }
+
+</section>

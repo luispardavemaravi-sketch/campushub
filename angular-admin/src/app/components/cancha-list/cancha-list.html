@@ -1,0 +1,276 @@
+
+<section>
+
+  <!-- ENCABEZADO -->
+  <div class="page-heading d-flex justify-content-between align-items-end flex-wrap gap-3">
+
+    <div>
+      <div class="page-eyebrow">Administración deportiva</div>
+
+      <h1 class="mb-2">Canchas deportivas</h1>
+
+      <p class="page-description">
+        Administra las canchas, complejos deportivos e implementos.
+      </p>
+    </div>
+
+    <a routerLink="/canchas/nuevo" class="btn btn-primary">
+      <span class="me-1">＋</span>
+      Registrar cancha
+    </a>
+
+  </div>
+
+  <!-- TARJETAS DE ESTADÍSTICAS -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-12 col-sm-4">
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-dark">▦</div>
+        <div>
+          <div class="stat-label">Total de canchas</div>
+          <div class="stat-number">{{ totalCanchas }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-4">
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-green">✓</div>
+        <div>
+          <div class="stat-label">Disponibles</div>
+          <div class="stat-number">{{ canchasDisponibles }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-4">
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-orange">⚙</div>
+        <div>
+          <div class="stat-label">En mantenimiento</div>
+          <div class="stat-number">{{ canchasMantenimiento }}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MENSAJE DE ERROR -->
+  @if (errorCarga) {
+    <div class="alert alert-danger border-0 rounded-3">
+      {{ errorCarga }}
+      <button class="btn btn-sm btn-outline-danger ms-2"
+        (click)="cargarCanchas()">
+        Reintentar
+      </button>
+    </div>
+  }
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="surface-card">
+
+    <!-- ENCABEZADO Y FILTROS -->
+    <div class="list-toolbar">
+
+      <div>
+        <h5 class="section-title mb-1">
+          Listado de canchas
+        </h5>
+
+        <p class="text-secondary small mb-0">
+          {{ canchasFiltradas.length }} resultados encontrados
+        </p>
+      </div>
+
+      <div class="filter-container">
+
+        <div class="search-field">
+          <span>⌕</span>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="filtroNombre"
+            (input)="filtrar()"
+            placeholder="Buscar cancha...">
+        </div>
+
+        <select
+          class="form-select complex-filter"
+          [(ngModel)]="filtroComplejo"
+          (change)="filtrar()">
+
+          <option value="">Todos los complejos</option>
+
+          @for (complejo of complejos; track complejo) {
+            <option [value]="complejo">
+              {{ complejo }}
+            </option>
+          }
+
+        </select>
+
+        <button
+          class="btn btn-light border"
+          type="button"
+          (click)="filtroNombre = ''; filtroComplejo = ''; filtrar()">
+          Limpiar
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- CARGANDO -->
+    @if (cargando) {
+
+      <div class="loading-state">
+        <div class="spinner-border text-success" role="status"></div>
+        <p class="mt-3 mb-0">Cargando canchas deportivas...</p>
+      </div>
+
+    } @else {
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+        <table class="table align-middle sport-table mb-0">
+
+          <thead>
+            <tr>
+              <th>CANCHA</th>
+              <th>COMPLEJO</th>
+              <th>CAPACIDAD</th>
+              <th>IMPLEMENTOS</th>
+              <th>ESTADO</th>
+              <th class="text-end">ACCIONES</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (cancha of canchasFiltradas; track cancha.id) {
+
+              <tr [appResaltarMantenimiento]="cancha.estado">
+
+                <td>
+                  <div class="court-name">
+                    <div class="court-icon">⚽</div>
+
+                    <div>
+                      <strong>{{ cancha.nombre }}</strong>
+                      <small>ID #{{ cancha.id }}</small>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="complex-name">
+                    {{ cancha.complejo }}
+                  </span>
+                </td>
+
+                <td>
+                  <strong>{{ cancha.capacidad }}</strong>
+                  <span class="text-secondary small"> jugadores</span>
+                </td>
+
+                <td>
+                  <div class="equipment-list">
+
+                    @for (implemento of cancha.implementos.slice(0, 2); track implemento) {
+                      <span class="equipment-tag">
+                        {{ implemento }}
+                      </span>
+                    }
+
+                    @if (cancha.implementos.length > 2) {
+                      <span class="equipment-more">
+                        +{{ cancha.implementos.length - 2 }}
+                      </span>
+                    }
+
+                    @if (cancha.implementos.length === 0) {
+                      <span class="text-secondary small">
+                        Sin implementos
+                      </span>
+                    }
+
+                  </div>
+                </td>
+
+                <td>
+                  <span class="status-pill" [ngClass]="obtenerClaseEstado(cancha.estado)">
+                    <span class="status-dot"></span>
+                    {{ cancha.estado === 'disponible' ? 'Disponible' : 'Mantenimiento' }}
+                  </span>
+                </td>
+
+                <td>
+                  <div class="action-buttons">
+
+                    <a
+                      [routerLink]="['/canchas', cancha.id]"
+                      class="action-btn action-view"
+                      title="Ver detalles">
+                      Ver
+                    </a>
+
+                    <a
+                      [routerLink]="['/canchas', cancha.id, 'editar']"
+                      class="action-btn action-edit"
+                      title="Editar cancha">
+                      Editar
+                    </a>
+
+                    <button
+                      type="button"
+                      class="action-btn action-delete"
+                      title="Eliminar cancha"
+                      (click)="eliminarCancha(cancha.id)">
+                      Eliminar
+                    </button>
+
+                  </div>
+                </td>
+
+              </tr>
+
+            } @empty {
+
+              <tr>
+                <td colspan="6">
+
+                  <div class="empty-state">
+                    <div class="empty-state-icon">🏟️</div>
+
+                    <h6 class="fw-bold">
+                      No se encontraron canchas
+                    </h6>
+
+                    <p class="small mb-3">
+                      Prueba cambiando los filtros o registra una nueva cancha.
+                    </p>
+
+                    <a routerLink="/canchas/nuevo" class="btn btn-primary btn-sm">
+                      Registrar cancha
+                    </a>
+                  </div>
+
+                </td>
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </div>
+
+</section>

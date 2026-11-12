@@ -1,8 +1,12 @@
+
 /**
- * CampusHub - Estadísticas con JavaScript avanzado.
+ * SportHub - Estadísticas con JavaScript avanzado.
  */
 
-// Contar reservas agrupadas por estado
+// =====================================================
+// REDUCE: RESERVAS POR ESTADO
+// =====================================================
+
 export function reservasPorEstado(reservas = []) {
     return reservas.reduce(
         (conteo, reserva) => {
@@ -20,12 +24,15 @@ export function reservasPorEstado(reservas = []) {
     );
 }
 
-// Map: cantidad de reservas aprobadas por laboratorio
-export function ocupacionPorLaboratorio(reservas = []) {
+// =====================================================
+// MAP: OCUPACIÓN POR CANCHA
+// =====================================================
+
+export function ocupacionPorCancha(reservas = []) {
     return reservas
         .filter((reserva) => reserva.estado === 'aprobada')
         .reduce((mapa, reserva) => {
-            const id = String(reserva.laboratorioId);
+            const id = String(reserva.canchaId);
 
             mapa.set(id, (mapa.get(id) ?? 0) + 1);
 
@@ -33,34 +40,40 @@ export function ocupacionPorLaboratorio(reservas = []) {
         }, new Map());
 }
 
-// Set: obtener sedes sin duplicados
-export const sedesUnicas = (laboratorios = []) =>
+// =====================================================
+// SET: COMPLEJOS DEPORTIVOS SIN DUPLICADOS
+// =====================================================
+
+export const complejosUnicos = (canchas = []) =>
     [
         ...new Set(
-            laboratorios
-                .map((laboratorio) => laboratorio.sede)
+            canchas
+                .map((cancha) => cancha.complejo)
                 .filter(Boolean)
         )
     ].sort();
 
-// Ranking de laboratorios más reservados
-export function rankingLaboratoriosMasReservados(
-    laboratorios = [],
+// =====================================================
+// SORT Y SPREAD: RANKING DE CANCHAS MÁS RESERVADAS
+// =====================================================
+
+export function rankingCanchasMasReservadas(
+    canchas = [],
     reservas = []
 ) {
     const cantidades = reservas.reduce((mapa, reserva) => {
-        const id = String(reserva.laboratorioId);
+        const id = String(reserva.canchaId);
 
         mapa.set(id, (mapa.get(id) ?? 0) + 1);
 
         return mapa;
     }, new Map());
 
-    return [...laboratorios]
-        .map((laboratorio) => ({
-            ...laboratorio,
+    return [...canchas]
+        .map((cancha) => ({
+            ...cancha,
             totalReservas:
-                cantidades.get(String(laboratorio.id)) ?? 0
+                cantidades.get(String(cancha.id)) ?? 0
         }))
         .sort(
             (a, b) =>
@@ -69,7 +82,10 @@ export function rankingLaboratoriosMasReservados(
         );
 }
 
-// Closure: generar códigos RES-0001, RES-0002...
+// =====================================================
+// CLOSURE: GENERADOR DE CÓDIGOS DE RESERVA
+// =====================================================
+
 export function crearGeneradorCodigoReserva(inicio = 1) {
     if (!Number.isInteger(inicio) || inicio < 1) {
         throw new RangeError('El inicio debe ser positivo.');
