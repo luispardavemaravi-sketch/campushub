@@ -24,7 +24,7 @@ export class ResaltarMantenimientoDirective implements OnChanges {
 
   ngOnChanges(_changes: SimpleChanges): void {
 
-    const fila = this.elemento.nativeElement;
+    const elemento = this.elemento.nativeElement;
 
     if (
       this.appResaltarMantenimiento?.toLowerCase() ===
@@ -32,27 +32,30 @@ export class ResaltarMantenimientoDirective implements OnChanges {
     ) {
 
       this.renderer.addClass(
-        fila,
+        elemento,
         'table-warning'
       );
 
       this.renderer.setAttribute(
-        fila,
+        elemento,
         'title',
-        'El laboratorio asociado está en mantenimiento'
+        'La cancha deportiva se encuentra en mantenimiento'
       );
 
     } else {
 
       this.renderer.removeClass(
-        fila,
+        elemento,
         'table-warning'
       );
 
       this.renderer.removeAttribute(
-        fila,
+        elemento,
         'title'
       );
+
     }
+
   }
+
 }

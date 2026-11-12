@@ -1,9 +1,59 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container">
-        <a class="navbar-brand fw-bold" routerLink="/laboratorios">CampusHub</a>
-        <div class="navbar-nav">
-            <a class="nav-link" routerLink="/laboratorios" routerLinkActive="active">Laboratorios</a>
-            <a class="nav-link" routerLink="/reservas" routerLinkActive="active">Reservas</a>
-        </div>
+<nav class="sport-navbar">
+  <div class="navbar-container">
+
+    <a class="brand" routerLink="/canchas">
+      <span class="brand-icon">🏆</span>
+
+      <span class="brand-text">
+        Sport<span>Hub</span>
+        <small>SPORTS MANAGEMENT</small>
+      </span>
+    </a>
+
+    <div class="navbar-links">
+
+      <a
+        routerLink="/canchas"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <span>▦</span>
+        Canchas
+      </a>
+
+      <a
+        routerLink="/canchas/nuevo"
+        routerLinkActive="active"
+      >
+        <span>＋</span>
+        Nueva cancha
+      </a>
+
+      <a
+        routerLink="/reservas"
+        routerLinkActive="active"
+      >
+        <span>▣</span>
+        Reservas
+      </a>
+
     </div>
+
+    <div class="d-flex align-items-center gap-3">
+
+      <div class="navbar-tag">
+        <span class="online-dot"></span>
+        Panel administrativo
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary"
+        (click)="cerrarSesion()"
+      >
+        Cerrar sesión
+      </button>
+
+    </div>
+  </div>
 </nav>

@@ -1,0 +1,78 @@
+
+:host {
+  display: block;
+}
+
+.form-page {
+  max-width: 900px;
+  margin: auto;
+}
+
+.form-card {
+  overflow: hidden;
+}
+
+.form-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 23px 26px;
+  border-bottom: 1px solid #edf1ed;
+}
+
+.form-heading-icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 13px;
+  background: #edf5e9;
+  font-size: 22px;
+}
+
+.form-card-header h5 {
+  color: #183c2d;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.form-card-body {
+  padding: 28px;
+}
+
+.form-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px 26px;
+  background: #fafcfa;
+  border-top: 1px solid #edf1ed;
+}
+
+.loading-form {
+  padding: 65px 20px;
+  text-align: center;
+  color: #75847a;
+}
+
+.form-text {
+  color: #829087;
+  font-size: 11px;
+}
+
+@media (max-width: 576px) {
+  .form-card-header,
+  .form-card-body {
+    padding: 20px;
+  }
+
+  .form-card-footer {
+    padding: 17px 20px;
+  }
+
+  .form-card-footer .btn {
+    flex: 1;
+  }
+}

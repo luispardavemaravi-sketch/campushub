@@ -1,6 +1,7 @@
 
 /**
- * CampusHub - Avance 1
- * URL base del API simulado con json-server.
+ * SportHub - Configuración de la API.
+ * JSON Server ejecutándose en el puerto 3000.
  */
+
 export const API_BASE_URL = 'http://localhost:3000';
