@@ -1,0 +1,586 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Mariana Ramos",
+      "correo": "u24254899@utp.edu.pe",
+      "codigo": "U24254899",
+      "rol": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": 2,
+      "nombre": "Alexander Vilcapoma",
+      "correo": "u24244609@utp.edu.pe",
+      "codigo": "U24244609",
+      "rol": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": 3,
+      "nombre": "Luisangel Pardave",
+      "correo": "u24224215@utp.edu.pe",
+      "codigo": "U24224215",
+      "rol": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": 4,
+      "nombre": "Italo Quispe",
+      "correo": "u24205021@utp.edu.pe",
+      "codigo": "U24205021",
+      "rol": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": 5,
+      "nombre": "Luis Quispe",
+      "correo": "luis@utp.edu.pe",
+      "codigo": "U20231234",
+      "rol": "estudiante",
+      "password": "cliente123"
+    },
+    {
+      "id": 6,
+      "nombre": "María Fernández",
+      "correo": "maria@utp.edu.pe",
+      "codigo": "U20231235",
+      "rol": "estudiante",
+      "password": "cliente123"
+    },
+    {
+      "id": 7,
+      "nombre": "Pedro Ramírez",
+      "correo": "pedro@utp.edu.pe",
+      "codigo": "U20231236",
+      "rol": "estudiante",
+      "password": "cliente123"
+    },
+    {
+      "id": 8,
+      "nombre": "Lucía García",
+      "correo": "lucia@utp.edu.pe",
+      "codigo": "U20231237",
+      "rol": "estudiante",
+      "password": "cliente123"
+    },
+    {
+      "id": 9,
+      "nombre": "Jorge Castillo",
+      "correo": "jorge@utp.edu.pe",
+      "codigo": "U20231238",
+      "rol": "estudiante",
+      "password": "cliente123"
+    },
+    {
+      "id": 10,
+      "nombre": "Sofía Morales",
+      "correo": "sofia@utp.edu.pe",
+      "codigo": "U20231239",
+      "rol": "estudiante",
+      "password": "cliente123"
+    }
+  ],
+  "canchas": [
+    {
+      "id": 1,
+      "nombre": "Cancha de Fútbol 01",
+      "complejo": "Complejo Deportivo Central",
+      "capacidad": 22,
+      "implementos": [
+        "Balones",
+        "Conos",
+        "Arcos",
+        "Redes"
+      ],
+      "estado": "disponible"
+    },
+    {
+      "nombre": "Cancha de Fútbol 02",
+      "complejo": "Complejo Deportivo Central",
+      "capacidad": 22,
+      "implementos": [
+        "Balones",
+        "Conos",
+        "Arcos"
+      ],
+      "estado": "disponible",
+      "id": 2
+    },
+    {
+      "id": 3,
+      "nombre": "Cancha de Básquet 01",
+      "complejo": "Complejo Deportivo Norte",
+      "capacidad": 10,
+      "implementos": [
+        "Balones de básquet",
+        "Tableros",
+        "Aros"
+      ],
+      "estado": "disponible"
+    },
+    {
+      "id": 4,
+      "nombre": "Cancha de Vóley 01",
+      "complejo": "Complejo Deportivo Norte",
+      "capacidad": 12,
+      "implementos": [
+        "Balones de vóley",
+        "Red",
+        "Postes"
+      ],
+      "estado": "mantenimiento"
+    },
+    {
+      "id": 5,
+      "nombre": "Cancha de Tenis 01",
+      "complejo": "Complejo Deportivo Sur",
+      "capacidad": 4,
+      "implementos": [
+        "Raquetas",
+        "Pelotas de tenis",
+        "Red"
+      ],
+      "estado": "disponible"
+    },
+    {
+      "id": 6,
+      "nombre": "Cancha de Futsal 01",
+      "complejo": "Complejo Deportivo Sur",
+      "capacidad": 12,
+      "implementos": [
+        "Balones de futsal",
+        "Arcos",
+        "Redes"
+      ],
+      "estado": "disponible"
+    },
+    {
+      "id": 7,
+      "nombre": "Cancha de Básquet 02",
+      "complejo": "Complejo Deportivo Central",
+      "capacidad": 10,
+      "implementos": [
+        "Balones de básquet",
+        "Tableros",
+        "Aros"
+      ],
+      "estado": "mantenimiento"
+    },
+    {
+      "nombre": "Cancha de Vóley 02",
+      "complejo": "Complejo Deportivo Sur",
+      "capacidad": 15,
+      "implementos": [
+        "Balones de vóley",
+        "Red",
+        "Postes"
+      ],
+      "estado": "disponible",
+      "id": 8
+    },
+    {
+      "nombre": "Cancha de Vóley 02",
+      "complejo": "Complejo Deportivo Central",
+      "capacidad": 21,
+      "implementos": [
+        "Balones",
+        "Conos",
+        "Arcos",
+        "Redes"
+      ],
+      "estado": "mantenimiento",
+      "id": 9
+    },
+    {
+      "nombre": "Cancha de Fútbol 03",
+      "complejo": "Complejo Deportivo Central",
+      "capacidad": 20,
+      "implementos": [
+        "Balones de vóley",
+        "Red",
+        "Postes"
+      ],
+      "estado": "disponible",
+      "id": 10
+    },
+    {
+      "nombre": "Cancha de Fútbol 02",
+      "complejo": "Complejo Deportivo Sur",
+      "capacidad": 20,
+      "implementos": [
+        "Balones",
+        "Conos",
+        "Arcos",
+        "Redes"
+      ],
+      "estado": "disponible",
+      "id": 11
+    }
+  ],
+  "reservas": [
+    {
+      "id": 1,
+      "codigo": "RES-0001",
+      "canchaId": 1,
+      "usuarioId": 3,
+      "fecha": "2026-11-20",
+      "horaInicio": "08:00",
+      "horaFin": "10:00",
+      "motivo": "Entrenamiento de fútbol",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "codigo": "RES-0002",
+      "canchaId": 1,
+      "usuarioId": 4,
+      "fecha": "2026-11-20",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Partido amistoso",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T10:30:00Z"
+    },
+    {
+      "id": 3,
+      "codigo": "RES-0003",
+      "canchaId": 2,
+      "usuarioId": 5,
+      "fecha": "2026-11-20",
+      "horaInicio": "09:00",
+      "horaFin": "11:00",
+      "motivo": "Práctica deportiva",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T11:00:00Z",
+      "motivoEstado": "Cancelada por mantenimiento de la cancha \"Cancha de Fútbol 02\".",
+      "canceladaEn": "2026-11-11T17:21:27.868Z",
+      "canceladaPor": "Administrador",
+      "restauradaEn": "2026-11-11T17:22:53.492Z",
+      "restauradaPor": "Administrador",
+      "motivoRestauracion": "Reserva restaurada por el administrador después de verificar la disponibilidad de la cancha."
+    },
+    {
+      "id": 4,
+      "codigo": "RES-0004",
+      "canchaId": 3,
+      "usuarioId": 6,
+      "fecha": "2026-11-20",
+      "horaInicio": "08:00",
+      "horaFin": "09:30",
+      "motivo": "Entrenamiento de básquet",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-10T11:30:00Z"
+    },
+    {
+      "id": 5,
+      "codigo": "RES-0005",
+      "canchaId": 5,
+      "usuarioId": 7,
+      "fecha": "2026-11-20",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Práctica de tenis",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T12:00:00Z"
+    },
+    {
+      "id": 6,
+      "codigo": "RES-0006",
+      "canchaId": 6,
+      "usuarioId": 8,
+      "fecha": "2026-11-20",
+      "horaInicio": "14:00",
+      "horaFin": "16:00",
+      "motivo": "Entrenamiento de futsal",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-10T12:30:00Z"
+    },
+    {
+      "id": 7,
+      "codigo": "RES-0007",
+      "canchaId": 8,
+      "usuarioId": 3,
+      "fecha": "2026-11-20",
+      "horaInicio": "15:00",
+      "horaFin": "17:00",
+      "motivo": "Partido de vóley",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T13:00:00Z"
+    },
+    {
+      "id": 8,
+      "codigo": "RES-0008",
+      "canchaId": 1,
+      "usuarioId": 5,
+      "fecha": "2026-11-21",
+      "horaInicio": "08:00",
+      "horaFin": "10:00",
+      "motivo": "Entrenamiento de fútbol",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-10T13:30:00Z"
+    },
+    {
+      "id": 9,
+      "codigo": "RES-0009",
+      "canchaId": 2,
+      "usuarioId": 6,
+      "fecha": "2026-11-21",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Partido de fútbol",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T14:00:00Z",
+      "motivoEstado": "Cancelada por mantenimiento de la cancha \"Cancha de Fútbol 02\".",
+      "canceladaEn": "2026-11-11T17:21:27.868Z",
+      "canceladaPor": "Administrador",
+      "restauradaEn": "2026-11-11T17:22:49.669Z",
+      "restauradaPor": "Administrador",
+      "motivoRestauracion": "Reserva restaurada por el administrador después de verificar la disponibilidad de la cancha."
+    },
+    {
+      "id": 10,
+      "codigo": "RES-0010",
+      "canchaId": 3,
+      "usuarioId": 7,
+      "fecha": "2026-11-21",
+      "horaInicio": "09:00",
+      "horaFin": "11:00",
+      "motivo": "Práctica de básquet",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T14:30:00Z"
+    },
+    {
+      "id": 11,
+      "codigo": "RES-0011",
+      "canchaId": 5,
+      "usuarioId": 8,
+      "fecha": "2026-11-21",
+      "horaInicio": "14:00",
+      "horaFin": "16:00",
+      "motivo": "Entrenamiento de tenis",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T15:00:00Z"
+    },
+    {
+      "id": 12,
+      "codigo": "RES-0012",
+      "canchaId": 6,
+      "usuarioId": 4,
+      "fecha": "2026-11-21",
+      "horaInicio": "16:00",
+      "horaFin": "18:00",
+      "motivo": "Partido de futsal",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-10T15:30:00Z"
+    },
+    {
+      "id": 13,
+      "codigo": "RES-0013",
+      "canchaId": 8,
+      "usuarioId": 3,
+      "fecha": "2026-11-22",
+      "horaInicio": "08:00",
+      "horaFin": "10:00",
+      "motivo": "Entrenamiento de vóley",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T16:00:00Z"
+    },
+    {
+      "id": 14,
+      "codigo": "RES-0014",
+      "canchaId": 1,
+      "usuarioId": 6,
+      "fecha": "2026-11-22",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Partido de fútbol",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T16:30:00Z"
+    },
+    {
+      "id": 15,
+      "codigo": "RES-0015",
+      "canchaId": 2,
+      "usuarioId": 7,
+      "fecha": "2026-11-22",
+      "horaInicio": "14:00",
+      "horaFin": "16:00",
+      "motivo": "Entrenamiento deportivo",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-10T17:00:00Z"
+    },
+    {
+      "id": 16,
+      "codigo": "RES-0016",
+      "canchaId": 3,
+      "usuarioId": 8,
+      "fecha": "2026-11-22",
+      "horaInicio": "16:00",
+      "horaFin": "18:00",
+      "motivo": "Partido de básquet",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T17:30:00Z"
+    },
+    {
+      "id": 17,
+      "codigo": "RES-0017",
+      "canchaId": 5,
+      "usuarioId": 4,
+      "fecha": "2026-11-23",
+      "horaInicio": "08:00",
+      "horaFin": "10:00",
+      "motivo": "Práctica de tenis",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T18:00:00Z"
+    },
+    {
+      "id": 18,
+      "codigo": "RES-0018",
+      "canchaId": 6,
+      "usuarioId": 5,
+      "fecha": "2026-11-23",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Entrenamiento de futsal",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T18:30:00Z"
+    },
+    {
+      "id": 19,
+      "codigo": "RES-0019",
+      "canchaId": 8,
+      "usuarioId": 6,
+      "fecha": "2026-11-23",
+      "horaInicio": "14:00",
+      "horaFin": "16:00",
+      "motivo": "Partido de vóley",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-10T19:00:00Z"
+    },
+    {
+      "id": 20,
+      "codigo": "RES-0020",
+      "canchaId": 1,
+      "usuarioId": 7,
+      "fecha": "2026-11-23",
+      "horaInicio": "16:00",
+      "horaFin": "18:00",
+      "motivo": "Entrenamiento de fútbol",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-10T19:30:00Z"
+    },
+    {
+      "canchaId": 6,
+      "usuarioId": 3,
+      "fecha": "2026-11-23",
+      "horaInicio": "12:21",
+      "horaFin": "12:51",
+      "motivo": "Entrenamiento",
+      "estado": "rechazada",
+      "codigo": "RES-0021",
+      "creadoEn": "2026-11-11T08:23:34.680Z",
+      "id": 21
+    },
+    {
+      "canchaId": 10,
+      "usuarioId": 3,
+      "fecha": "2026-11-11",
+      "horaInicio": "08:51",
+      "horaFin": "09:21",
+      "motivo": "Entrenamiento",
+      "estado": "rechazada",
+      "codigo": "RES-0022",
+      "creadoEn": "2026-11-11T08:51:51.366Z",
+      "id": 22
+    },
+    {
+      "canchaId": 2,
+      "usuarioId": 3,
+      "fecha": "2026-11-11",
+      "horaInicio": "20:54",
+      "horaFin": "21:24",
+      "motivo": "Entrenamiento",
+      "estado": "rechazada",
+      "codigo": "RES-0023",
+      "creadoEn": "2026-11-11T08:54:28.156Z",
+      "id": 23
+    },
+    {
+      "canchaId": 11,
+      "usuarioId": 3,
+      "fecha": "2026-11-11",
+      "horaInicio": "21:02",
+      "horaFin": "21:32",
+      "motivo": "Entrenamiento",
+      "estado": "rechazada",
+      "codigo": "RES-0024",
+      "creadoEn": "2026-11-11T09:02:45.451Z",
+      "id": 24
+    },
+    {
+      "canchaId": 2,
+      "usuarioId": 3,
+      "fecha": "2026-11-11",
+      "horaInicio": "07:44",
+      "horaFin": "08:14",
+      "motivo": "Entrenamiento",
+      "estado": "aprobada",
+      "codigo": "RES-0025",
+      "creadoEn": "2026-11-11T09:44:22.310Z",
+      "id": 25,
+      "motivoEstado": "Cancelada por mantenimiento de la cancha \"Cancha de Fútbol 02\".",
+      "canceladaEn": "2026-11-11T09:48:41.501Z",
+      "canceladaPor": "Administrador",
+      "restauradaEn": "2026-11-11T10:32:02.393Z",
+      "restauradaPor": "Administrador",
+      "motivoRestauracion": "Reserva restaurada por el administrador después de verificar la disponibilidad de la cancha."
+    },
+    {
+      "id": 26,
+      "codigo": "RES-0026",
+      "canchaId": 2,
+      "usuarioId": 4,
+      "fecha": "2026-10-10",
+      "horaInicio": "09:00",
+      "horaFin": "11:00",
+      "motivo": "Entrenamiento de fútbol",
+      "estado": "cancelada",
+      "creadoEn": "2026-10-05T14:00:00.000Z",
+      "motivoEstado": "Cancelada por mantenimiento de la cancha.",
+      "canceladaEn": "2026-10-08T15:00:00.000Z",
+      "canceladaPor": "Administrador"
+    },
+    {
+      "id": 27,
+      "codigo": "RES-0027",
+      "canchaId": 4,
+      "usuarioId": 5,
+      "fecha": "2026-10-15",
+      "horaInicio": "15:00",
+      "horaFin": "17:00",
+      "motivo": "Práctica de vóley",
+      "estado": "cancelada",
+      "creadoEn": "2026-10-09T16:30:00.000Z",
+      "motivoEstado": "Cancelada por mantenimiento imprevisto de la cancha.",
+      "canceladaEn": "2026-10-12T10:15:00.000Z",
+      "canceladaPor": "Administrador"
+    },
+    {
+      "id": 28,
+      "codigo": "RES-0028",
+      "canchaId": 7,
+      "usuarioId": 6,
+      "fecha": "2026-10-20",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Entrenamiento de básquet",
+      "estado": "cancelada",
+      "creadoEn": "2026-10-14T12:00:00.000Z",
+      "motivoEstado": "Cancelada por cierre temporal del complejo deportivo.",
+      "canceladaEn": "2026-10-18T09:30:00.000Z",
+      "canceladaPor": "Administrador"
+    }
+  ]
+}
