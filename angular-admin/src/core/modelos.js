@@ -19,7 +19,7 @@ export class Usuario {
         nombre,
         correo,
         codigo,
-        rol = 'cliente',
+        rol = 'estudiante',
         password
     } = {}) {
         Object.assign(this, {

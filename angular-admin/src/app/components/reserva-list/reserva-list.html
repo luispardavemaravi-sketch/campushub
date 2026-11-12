@@ -648,6 +648,23 @@
 
                   }
 
+                  @if (
+                    reserva.estado !== 'cancelada' &&
+                    reserva.estado !== 'rechazada'
+                  ) {
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-danger mt-2"
+                      (click)="cancelarReserva(reserva)"
+                      [disabled]="actualizandoIds.has(reserva.id)"
+                    >
+                      {{ actualizandoIds.has(reserva.id)
+                        ? 'Cancelando...'
+                        : 'Cancelar'
+                      }}
+                    </button>
+                  }
+
                 </td>
 
               </tr>

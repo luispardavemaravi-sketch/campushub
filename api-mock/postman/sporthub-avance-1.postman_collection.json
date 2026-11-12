@@ -1,0 +1,136 @@
+{
+  "info": {
+    "_postman_id": "470e31e6-ffdc-44c4-9ffb-21645f885b00",
+    "name": "SportHub - Avance 1",
+    "description": "Pruebas del CRUD de canchas y gestión de reservas de SportHub.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "canchaId",
+      "value": "1"
+    },
+    {
+      "key": "usuarioId",
+      "value": "5"
+    },
+    {
+      "key": "reservaId",
+      "value": "20"
+    }
+  ],
+  "item": [
+    {
+      "name": "Canchas",
+      "item": [
+        {
+          "name": "Listar y filtrar",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/canchas?complejo=Complejo%20Deportivo%20Central&q=Fútbol"
+          }
+        },
+        {
+          "name": "Ver detalle",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/canchas/{{canchaId}}"
+          }
+        },
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cancha de Prueba 01\",\n  \"complejo\": \"Complejo Deportivo Central\",\n  \"capacidad\": 20,\n  \"implementos\": [\"Balones\", \"Conos\"],\n  \"estado\": \"disponible\"\n}"
+            },
+            "url": "{{baseUrl}}/canchas"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cancha de Prueba 01\",\n  \"complejo\": \"Complejo Deportivo Central\",\n  \"capacidad\": 24,\n  \"implementos\": [\"Balones\", \"Redes\"],\n  \"estado\": \"disponible\"\n}"
+            },
+            "url": "{{baseUrl}}/canchas/{{canchaId}}"
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/canchas/{{canchaId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservas",
+      "item": [
+        {
+          "name": "Listar por usuario",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reservas?usuarioId={{usuarioId}}"
+          }
+        },
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"RES-0029\",\n  \"canchaId\": 1,\n  \"usuarioId\": 5,\n  \"fecha\": \"2026-12-15\",\n  \"horaInicio\": \"08:00\",\n  \"horaFin\": \"09:00\",\n  \"motivo\": \"Prueba de API SportHub\",\n  \"estado\": \"pendiente\",\n  \"creadoEn\": \"2026-11-12T12:00:00.000Z\"\n}"
+            },
+            "url": "{{baseUrl}}/reservas"
+          }
+        },
+        {
+          "name": "Cancelar",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/reservas/{{reservaId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Buscar usuario para login simulado",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/usuarios?correo=luis%40utp.edu.pe"
+          }
+        }
+      ]
+    }
+  ]
+}

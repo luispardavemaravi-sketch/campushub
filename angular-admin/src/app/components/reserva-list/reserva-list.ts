@@ -186,7 +186,7 @@ export class ReservaList implements OnInit {
         this.canchas = canchas;
 
         this.clientes = usuarios.filter(
-          usuario => usuario.rol === 'cliente'
+          usuario => usuario.rol === 'estudiante'
         );
 
         this.reservas = reservas
@@ -584,6 +584,44 @@ export class ReservaList implements OnInit {
 
         this.errorFormulario =
           'No se pudo registrar la reserva. Inténtalo nuevamente.';
+      }
+    });
+  }
+
+  cancelarReserva(reserva: ReservaVista): void {
+    if (
+      this.actualizandoIds.has(reserva.id) ||
+      reserva.estado === 'cancelada' ||
+      reserva.estado === 'rechazada'
+    ) {
+      return;
+    }
+
+    const confirmar = window.confirm(
+      `¿Deseas cancelar la reserva ${reserva.codigo}?`
+    );
+
+    if (!confirmar) return;
+
+    this.actualizandoIds.add(reserva.id);
+    this.errorCarga = '';
+    this.mensaje = '';
+
+    this.reservaService.cancelar(reserva.id).subscribe({
+      next: () => {
+        this.reservas = this.reservas.filter(
+          item => item.id !== reserva.id
+        );
+        this.actualizandoIds.delete(reserva.id);
+        this.mensaje = `La reserva ${reserva.codigo} fue cancelada.`;
+        this.cdr.detectChanges();
+      },
+      error: error => {
+        console.error('Error al cancelar la reserva:', error);
+        this.actualizandoIds.delete(reserva.id);
+        this.errorCarga =
+          'No se pudo cancelar la reserva. Inténtalo nuevamente.';
+        this.cdr.detectChanges();
       }
     });
   }

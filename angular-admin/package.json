@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "npm --prefix ../core-js test",
     "serve:ssr:angular-admin": "node dist/angular-admin/server/server.mjs",
     "sync-core": "node -e \"require('fs').cpSync('../core-js', 'src/core', {recursive:true})\""
   },

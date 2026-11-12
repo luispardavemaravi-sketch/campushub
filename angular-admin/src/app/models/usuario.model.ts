@@ -1,7 +1,7 @@
 
 export type RolUsuario =
   | 'admin'
-  | 'cliente';
+  | 'estudiante';
 
 /**
  * Usuario del sistema SportHub.
